@@ -37,11 +37,17 @@ export const getStyles = memoizeFunction((
     TimeCombobox: {
       root: {
         border: '1px solid transparent',
+        margin: '0px'
+      },
+      rootHovered: {
         selectors: {
           ':hover': {
             border: '1px solid rgb(226, 226, 226)'
           }
         }
+      },
+      container: {
+        border: '1px solid transparent'
       },
       callout: {
         boxShadow: 'none',

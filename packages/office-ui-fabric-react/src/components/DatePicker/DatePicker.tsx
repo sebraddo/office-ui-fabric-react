@@ -233,39 +233,37 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
 
     return (
       <div className={ this._classNames.root } ref={ this._resolveRef('_root') }>
-        <div className={ this._classNames.dateContainer } >
-          <div ref={ this._resolveRef('_datepicker') }>
-            <TextField
-              className={ this._classNames.dateTextField }
-              ariaLabel={ ariaLabel }
-              aria-haspopup='true'
-              aria-expanded={ isDatePickerShown }
-              required={ isRequired }
-              disabled={ disabled }
-              onKeyDown={ this._onTextFieldKeyDown }
-              onFocus={ this._onTextFieldFocus }
-              onBlur={ this._onTextFieldBlur }
-              onClick={ this._onTextFieldClick }
-              onChanged={ this._onTextFieldChanged }
-              errorMessage={ errorMessage }
-              label={ label }
-              placeholder={ placeholder }
-              borderless={ borderless }
-              iconProps={ {
-                iconName: 'Calendar',
-                onClick: this._onIconClick,
-                className: css(
-                  disabled && styles.msDatePickerDisabled,
-                  label ? 'ms-DatePicker-event--with-label' : 'ms-DatePicker-event--without-label',
-                  label ? styles.eventWithLabel : styles.eventWithoutLabel
-                )
-              } }
-              readOnly={ !allowTextInput }
-              value={ formattedDate }
-              ref={ this._resolveRef('_textField') }
-              role={ allowTextInput ? 'combobox' : 'menu' }
-            />
-          </div>
+        <div className={ this._classNames.dateContainer } ref={ this._resolveRef('_datepicker') }>
+          <TextField
+            className={ this._classNames.dateTextField }
+            ariaLabel={ ariaLabel }
+            aria-haspopup='true'
+            aria-expanded={ isDatePickerShown }
+            required={ isRequired }
+            disabled={ disabled }
+            onKeyDown={ this._onTextFieldKeyDown }
+            onFocus={ this._onTextFieldFocus }
+            onBlur={ this._onTextFieldBlur }
+            onClick={ this._onTextFieldClick }
+            onChanged={ this._onTextFieldChanged }
+            errorMessage={ errorMessage }
+            label={ label }
+            placeholder={ placeholder }
+            borderless={ borderless }
+            iconProps={ {
+              iconName: 'Calendar',
+              onClick: this._onIconClick,
+              className: css(
+                disabled && styles.msDatePickerDisabled,
+                label ? 'ms-DatePicker-event--with-label' : 'ms-DatePicker-event--without-label',
+                label ? styles.eventWithLabel : styles.eventWithoutLabel
+              )
+            } }
+            readOnly={ !allowTextInput }
+            value={ formattedDate }
+            ref={ this._resolveRef('_textField') }
+            role={ allowTextInput ? 'combobox' : 'menu' }
+          />
           { <ComboBox
             defaultSelectedKey='C'
             id='Basicdrop1'
@@ -311,7 +309,8 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
               ref={ this._resolveRef('_calendar') }
             />
           </Callout>
-        ) }
+        )
+        }
       </div>
     );
   }
