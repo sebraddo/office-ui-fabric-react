@@ -11,6 +11,7 @@ import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
 import { Callout } from '../../Callout';
 import { DirectionalHint } from '../../common/DirectionalHint';
 import { TextField } from '../../TextField';
+import { ComboBox, IComboBoxProps, IComboBoxOption, } from '../ComboBox'
 import {
   autobind,
   BaseComponent,
@@ -18,8 +19,11 @@ import {
   css
 } from '../../Utilities';
 import { compareDates, compareDatePart } from '../../utilities/dateMath/DateMath';
+import { getStyles } from './DatePicker.Style';
+import { getClassNames, IDatePickerClassNames } from './DatePicker.className';
 import * as stylesImport from './DatePicker.scss';
 const styles: any = stylesImport;
+import { IIconProps } from '../Icon/Icon.types';
 
 export interface IDatePickerState {
   selectedDate?: Date;
@@ -86,6 +90,18 @@ const DEFAULT_STRINGS: IDatePickerStrings = {
   nextYearAriaLabel: 'Go to next year'
 };
 
+const timeOptions =
+  [
+    { key: 'Header', text: '12:00 PM' },
+    { key: 'A', text: '12:15 PM' },
+    { key: 'B', text: '12:30 PM' },
+    { key: 'C', text: '12:45 PM' },
+    { key: 'divider_2', text: '1:00 PM' },
+    { key: 'D', text: '1:30 PM' },
+    { key: 'E', text: '1"45 PM' },
+    { key: 'F', text: '2:00 PM' }
+  ];
+
 export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState> {
   public static defaultProps: IDatePickerProps = {
     allowTextInput: false,
@@ -116,7 +132,8 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
     showWeekNumbers: false,
     firstWeekOfYear: FirstWeekOfYear.FirstDay,
     showGoToToday: true,
-    dateTimeFormatter: undefined
+    dateTimeFormatter: undefined,
+    hasTimePicker: false
   };
 
   private _root: HTMLElement;
@@ -125,6 +142,7 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
   private _textField: TextField;
   private _preventFocusOpeningPicker: boolean;
   private _focusOnSelectedDateOnUpdate: boolean;
+  private _classNames: IDatePickerClassNames;
 
   constructor(props: IDatePickerProps) {
     super(props);
@@ -177,6 +195,10 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
     }
   }
 
+  private _renderTimePicker() {
+
+  }
+
   public render() {
     const {
       firstDayOfWeek,
@@ -193,50 +215,75 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
       className,
       minDate,
       maxDate,
-      calendarProps
+      calendarProps,
+      hasTimePicker,
+      styles: customStyle
     } = this.props;
     const { isDatePickerShown, formattedDate, selectedDate, errorMessage } = this.state;
 
+    const combinedStyle = getStyles(customStyle);
+    this._classNames = getClassNames(combinedStyle, className!);
+    //TODO remove
+    const buttonIconProps: IIconProps = {
+      iconName: 'Clock',
+      className: this._classNames.timePickerIconStyle
+    };
+
+    const borderCombobox = ((combinedStyle.TimeCombobox as any).border === "none")
+
     return (
-      <div className={ css('ms-DatePicker', styles.root, className) } ref={ this._resolveRef('_root') }>
-        <div ref={ this._resolveRef('_datepicker') }>
-          <TextField
-            className={ styles.textField }
-            ariaLabel={ ariaLabel }
-            aria-haspopup='true'
-            aria-expanded={ isDatePickerShown }
-            required={ isRequired }
-            disabled={ disabled }
-            onKeyDown={ this._onTextFieldKeyDown }
-            onFocus={ this._onTextFieldFocus }
-            onBlur={ this._onTextFieldBlur }
-            onClick={ this._onTextFieldClick }
-            onChanged={ this._onTextFieldChanged }
-            errorMessage={ errorMessage }
-            label={ label }
-            placeholder={ placeholder }
-            borderless={ borderless }
-            iconProps={ {
-              iconName: 'Calendar',
-              onClick: this._onIconClick,
-              className: css(
-                disabled && styles.msDatePickerDisabled,
-                label ? 'ms-DatePicker-event--with-label' : 'ms-DatePicker-event--without-label',
-                label ? styles.eventWithLabel : styles.eventWithoutLabel
-              )
-            } }
-            readOnly={ !allowTextInput }
-            value={ formattedDate }
-            ref={ this._resolveRef('_textField') }
-            role={ allowTextInput ? 'combobox' : 'menu' }
-          />
+      <div className={ this._classNames.root } ref={ this._resolveRef('_root') }>
+        <div className={ this._classNames.dateContainer } >
+          <div ref={ this._resolveRef('_datepicker') }>
+            <TextField
+              className={ this._classNames.dateTextField }
+              ariaLabel={ ariaLabel }
+              aria-haspopup='true'
+              aria-expanded={ isDatePickerShown }
+              required={ isRequired }
+              disabled={ disabled }
+              onKeyDown={ this._onTextFieldKeyDown }
+              onFocus={ this._onTextFieldFocus }
+              onBlur={ this._onTextFieldBlur }
+              onClick={ this._onTextFieldClick }
+              onChanged={ this._onTextFieldChanged }
+              errorMessage={ errorMessage }
+              label={ label }
+              placeholder={ placeholder }
+              borderless={ borderless }
+              iconProps={ {
+                iconName: 'Calendar',
+                onClick: this._onIconClick,
+                className: css(
+                  disabled && styles.msDatePickerDisabled,
+                  label ? 'ms-DatePicker-event--with-label' : 'ms-DatePicker-event--without-label',
+                  label ? styles.eventWithLabel : styles.eventWithoutLabel
+                )
+              } }
+              readOnly={ !allowTextInput }
+              value={ formattedDate }
+              ref={ this._resolveRef('_textField') }
+              role={ allowTextInput ? 'combobox' : 'menu' }
+            />
+          </div>
+          { <ComboBox
+            defaultSelectedKey='C'
+            id='Basicdrop1'
+            ariaLabel='Basic ComboBox example'
+            styles={ combinedStyle.TimeCombobox }
+            allowFreeform={ true }
+            autoComplete='on'
+            options={ timeOptions }
+            useComboBoxAsMenuWidth
+            buttonIconProps={ buttonIconProps }
+          /> }
         </div>
         { isDatePickerShown && (
           <Callout
             role='dialog'
             ariaLabel={ pickerAriaLabel }
             isBeakVisible={ false }
-            className={ css('ms-DatePicker-callout') }
+            className={ this._classNames.dateCalendar }
             gapSpace={ 0 }
             doNotLayer={ false }
             target={ this._datepicker }

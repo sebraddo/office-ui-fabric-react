@@ -877,7 +877,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
         setInitialFocus={ false }
         calloutWidth={
           useComboBoxAsMenuWidth ?
-            this._comboBoxWrapper.clientWidth + 2
+            this._comboBoxWrapper.clientWidth
             : dropdownWidth }
       >
         <div className={ this._classNames.optionsContainerWrapper } ref={ this._resolveRef('_comboBoxMenu') }>

@@ -19,6 +19,14 @@
   @include ms-normalize;
 }
 
+.dateTimeContainer {
+  display: flex;
+}
+
+.callOutNoBoarder {
+  box-shadow: none;
+}
+
 .textField {
   position: relative;
 

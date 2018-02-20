@@ -3,7 +3,8 @@ import {
   ComboBox,
   IComboBoxProps,
   IComboBoxOption,
-  VirtualizedComboBox
+  VirtualizedComboBox,
+  IComboBoxStyles
 } from 'office-ui-fabric-react/lib/ComboBox';
 import './ComboBox.Basic.Example.scss';
 import {
@@ -63,6 +64,13 @@ export class ComboBoxBasicExample extends React.Component<{}, {
 
   public render() {
     let { options, selectedOptionKey, value } = this.state;
+    let rootStyle: Partial<IComboBoxStyles> = {
+      callout: {
+        boxShadow: 'none',
+        borderColor: "black"
+        //boxSizing: "content-box"
+      }
+    };
 
     return (
       <div className='ms-ComboBoxBasicExample'>
@@ -70,18 +78,20 @@ export class ComboBoxBasicExample extends React.Component<{}, {
         <ComboBox
           defaultSelectedKey='C'
           label='Basic uncontrolled example (allowFreeform: T, AutoComplete: T):'
-          id='Basicdrop1'
+          id='casey'
           ariaLabel='Basic ComboBox example'
           allowFreeform={ true }
           autoComplete='on'
           options={ this._testOptions }
           onRenderOption={ this._onRenderFontOption }
           componentRef={ this._basicComboBoxComponentRef }
+          styles={ rootStyle }
+          useComboBoxAsMenuWidth
           // tslint:disable:jsx-no-lambda
           onFocus={ () => console.log('onFocus called') }
           onBlur={ () => console.log('onBlur called') }
           onMenuOpen={ () => console.log('ComboBox menu opened') }
-          // tslint:enable:jsx-no-lambda
+        // tslint:enable:jsx-no-lambda
         />
 
         <PrimaryButton

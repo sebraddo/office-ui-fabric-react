@@ -3,6 +3,8 @@ import { DatePicker } from './DatePicker';
 import { DayOfWeek, ICalendarProps } from '../../Calendar';
 import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
 import { ICalendarFormatDateCallbacks } from '../Calendar/Calendar.types';
+import { IStyle, ITheme } from '../../Styling';
+import { IComboBoxStyles } from '../ComboBox/ComboBox.types'
 
 export interface IDatePicker {
 
@@ -169,6 +171,10 @@ export interface IDatePickerProps extends React.Props<DatePicker> {
    * The initially highlighted date in the calendar picker
    */
   initialPickerDate?: Date;
+
+  hasTimePicker?: boolean;
+
+  styles?: IDatePickerStyles;
 }
 
 export interface IDatePickerStrings {
@@ -235,4 +241,26 @@ export interface IDatePickerStrings {
    * Aria-label for the "next year" button.
    */
   nextYearAriaLabel?: string;
+}
+
+export interface IDatePickerStyles {
+
+  //TODO: Comments
+  root?: IStyle;
+
+  dateContainer?: IStyle;
+
+  dateTextField?: IStyle;
+
+  dateCallout?: IStyle;
+
+  dateCalendar?: IStyle;
+
+  timepickerTextField?: IStyle;
+
+  TimeCombobox?: Partial<IComboBoxStyles>;
+
+  iconStyle?: IStyle;
+
+  timePickerIconStyle?: IStyle;
 }

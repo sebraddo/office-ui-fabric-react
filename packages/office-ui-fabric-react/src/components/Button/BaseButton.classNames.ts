@@ -84,8 +84,8 @@ export const getBaseButtonClassNames = memoizeFunction((
     ],
     icon: [
       'ms-Button-icon',
-      iconClassName,
       styles.icon,
+      iconClassName,
       isExpanded && styles.iconExpanded,
       checked && styles.iconChecked,
       disabled && styles.iconDisabled,
