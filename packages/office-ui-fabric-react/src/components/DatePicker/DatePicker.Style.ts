@@ -2,10 +2,12 @@ import { IDatePickerStyles } from './DatePicker.types';
 import { memoizeFunction } from '../../Utilities';
 import { concatStyleSets, IStyle } from '../../Styling';
 import * as stylesImport from './DatePicker.scss';
+import { ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
 const styles: any = stylesImport;
 
 export const getStyles = memoizeFunction((
   customStyles?: Partial<IDatePickerStyles>,
+  responsiveMode?: ResponsiveMode
 ): Partial<IDatePickerStyles> => {
 
   const datetimePickerStyle: IDatePickerStyles = {
@@ -16,11 +18,14 @@ export const getStyles = memoizeFunction((
 
   customStyles = {
     root: {
-      display: 'flex'
+      display: 'flex',
+      flexDirection: 'column'
     },
     dateContainer: {
       height: '100%',
-      display: 'flex'
+      display: 'flex',
+      minWidth: responsiveMode! <= ResponsiveMode.small ? '9rem' : '18rem',
+      flexDirection: responsiveMode! <= ResponsiveMode.small ? 'column' : 'row'
     },
     dateTextField: {
       border: '1px solid transparent',
@@ -28,7 +33,8 @@ export const getStyles = memoizeFunction((
         ':hover': {
           border: '1px solid rgb(226, 226, 226)'
         }
-      }
+      },
+      marginRight: responsiveMode! <= ResponsiveMode.small ? '0rem' : '0.5rem'
     },
     dateCalendar: {
       border: '1px solid rgb(226, 226, 226)',
@@ -37,7 +43,8 @@ export const getStyles = memoizeFunction((
     TimeCombobox: {
       root: {
         border: '1px solid transparent',
-        margin: '0px'
+        margin: '0px',
+        paddingRight: '12px'
       },
       rootHovered: {
         selectors: {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { autobind } from '../../../Utilities';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { DatePicker, DayOfWeek, IDatePickerStrings } from 'office-ui-fabric-react/lib/DatePicker';
+import { DatePicker, DayOfWeek, IDatePickerStrings, DatePickerFormat } from 'office-ui-fabric-react/lib/DatePicker';
 
 const DayPickerStrings: IDatePickerStrings = {
   months: [
@@ -79,7 +79,7 @@ export class DatePickerBasicExample extends React.Component<{}, IDatePickerBasic
 
     return (
       <div>
-        <DatePicker borderless firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } hasTimePicker showGoToToday={false} isMonthPickerVisible={ false } placeholder='Select a date...' />
+        <DatePicker displayDatePickerFormat={ DatePickerFormat.dateOnly } borderless firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } hasTimePicker showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
         <Dropdown
           label='Select the first day of the week'
           options={ [
@@ -115,6 +115,8 @@ export class DatePickerBasicExample extends React.Component<{}, IDatePickerBasic
           selectedKey={ DayOfWeek[firstDayOfWeek!] }
           onChanged={ this._onDropdownChanged }
         />
+        <DatePicker displayDatePickerFormat={ DatePickerFormat.bothDateAndDate } borderless firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } hasTimePicker showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
+        <DatePicker displayDatePickerFormat={ DatePickerFormat.timeOnly } borderless firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } hasTimePicker showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
       </div>
     );
   }

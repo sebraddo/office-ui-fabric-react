@@ -4,13 +4,14 @@ import { DayOfWeek, ICalendarProps } from '../../Calendar';
 import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
 import { ICalendarFormatDateCallbacks } from '../Calendar/Calendar.types';
 import { IStyle, ITheme } from '../../Styling';
-import { IComboBoxStyles } from '../ComboBox/ComboBox.types'
+import { IComboBoxStyles } from '../ComboBox/ComboBox.types';
+import { IWithResponsiveModeState } from '../../utilities/decorators/withResponsiveMode';
 
 export interface IDatePicker {
 
 }
 
-export interface IDatePickerProps extends React.Props<DatePicker> {
+export interface IDatePickerProps extends React.Props<DatePicker>, IWithResponsiveModeState {
   /**
    * Optional callback to access the IDatePicker interface. Use this instead of ref for accessing
    * the public methods and properties of the component.
@@ -175,6 +176,14 @@ export interface IDatePickerProps extends React.Props<DatePicker> {
   hasTimePicker?: boolean;
 
   styles?: IDatePickerStyles;
+
+  displayDatePickerFormat?: DatePickerFormat;
+}
+
+export enum DatePickerFormat {
+  dateOnly = 0,
+  timeOnly = 1,
+  bothDateAndDate = 2,
 }
 
 export interface IDatePickerStrings {

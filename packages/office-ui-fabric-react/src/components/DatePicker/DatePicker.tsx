@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {
   IDatePickerProps,
-  IDatePickerStrings
+  IDatePickerStrings,
+  DatePickerFormat
 } from './DatePicker.types';
 import {
   Calendar,
@@ -25,6 +26,7 @@ import { getClassNames, IDatePickerClassNames } from './DatePicker.className';
 import * as stylesImport from './DatePicker.scss';
 const styles: any = stylesImport;
 import { IIconProps } from '../Icon/Icon.types';
+import { withResponsiveMode, ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
 
 export interface IDatePickerState {
   selectedDate?: Date;
@@ -103,6 +105,7 @@ const timeOptions =
     { key: 'F', text: '2:00 PM' }
   ];
 
+@withResponsiveMode
 export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState> {
   public static defaultProps: IDatePickerProps = {
     allowTextInput: false,
@@ -134,7 +137,8 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
     firstWeekOfYear: FirstWeekOfYear.FirstDay,
     showGoToToday: true,
     dateTimeFormatter: undefined,
-    hasTimePicker: false
+    hasTimePicker: false,
+    displayDatePickerFormat: DatePickerFormat.dateOnly
   };
 
   private _root: HTMLElement;
@@ -188,7 +192,7 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
     // had a legit change. Note tha the bug will still repro when only the formatDate was passed in props and this
     // is the result of the onSelectDate callback, but this should be a rare scenario.
     const oldValue = this.state.selectedDate;
-    if (!compareDates(oldValue!, value!) || this.props.formatDate !== formatDate) {
+    if (value !== undefined && !compareDates(oldValue!, value!) || this.props.formatDate !== formatDate) {
       this.setState({
         selectedDate: value || undefined,
         formattedDate: (formatDate && value) ? formatDate(value) : '',
@@ -218,11 +222,13 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
       maxDate,
       calendarProps,
       hasTimePicker,
-      styles: customStyle
+      styles: customStyle,
+      responsiveMode,
+      displayDatePickerFormat
     } = this.props;
     const { isDatePickerShown, formattedDate, selectedDate, errorMessage } = this.state;
 
-    const combinedStyle = getStyles(customStyle);
+    const combinedStyle = getStyles(customStyle, responsiveMode);
     this._classNames = getClassNames(combinedStyle, className!);
     //TODO remove
     const buttonIconProps: IIconProps = {
@@ -237,37 +243,40 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
         { label && (
           <Label required={ isRequired }>{ label }</Label>
         ) }
-        <div className={ this._classNames.dateContainer } ref={ this._resolveRef('_datepicker') }>
-          <TextField
-            className={ this._classNames.dateTextField }
-            ariaLabel={ ariaLabel }
-            aria-haspopup='true'
-            aria-expanded={ isDatePickerShown }
-            required={ isRequired }
-            disabled={ disabled }
-            onKeyDown={ this._onTextFieldKeyDown }
-            onFocus={ this._onTextFieldFocus }
-            onBlur={ this._onTextFieldBlur }
-            onClick={ this._onTextFieldClick }
-            onChanged={ this._onTextFieldChanged }
-            errorMessage={ errorMessage }
-            placeholder={ placeholder }
-            borderless={ borderless }
-            iconProps={ {
-              iconName: 'Calendar',
-              onClick: this._onIconClick,
-              className: css(
-                disabled && styles.msDatePickerDisabled,
-                label ? 'ms-DatePicker-event--with-label' : 'ms-DatePicker-event--without-label',
-                label ? styles.eventWithLabel : styles.eventWithoutLabel
-              )
-            } }
-            readOnly={ !allowTextInput }
-            value={ formattedDate }
-            ref={ this._resolveRef('_textField') }
-            role={ allowTextInput ? 'combobox' : 'menu' }
-          />
-          { <ComboBox
+        <div className={ this._classNames.dateContainer } >
+          { displayDatePickerFormat !== DatePickerFormat.timeOnly &&
+            <div ref={ this._resolveRef('_datepicker') }>
+              <TextField
+                className={ this._classNames.dateTextField }
+                ariaLabel={ ariaLabel }
+                aria-haspopup='true'
+                aria-expanded={ isDatePickerShown }
+                required={ isRequired }
+                disabled={ disabled }
+                onKeyDown={ this._onTextFieldKeyDown }
+                onFocus={ this._onTextFieldFocus }
+                onBlur={ this._onTextFieldBlur }
+                onClick={ this._onTextFieldClick }
+                onChanged={ this._onTextFieldChanged }
+                errorMessage={ errorMessage }
+                placeholder={ placeholder }
+                borderless={ borderless }
+                iconProps={ {
+                  iconName: 'Calendar',
+                  onClick: this._onIconClick,
+                  className: css(
+                    disabled && styles.msDatePickerDisabled,
+                    label ? 'ms-DatePicker-event--with-label' : 'ms-DatePicker-event--without-label',
+                    label ? styles.eventWithLabel : styles.eventWithoutLabel
+                  )
+                } }
+                readOnly={ !allowTextInput }
+                value={ formattedDate }
+                ref={ this._resolveRef('_textField') }
+                role={ allowTextInput ? 'combobox' : 'menu' }
+              />
+            </div> }
+          { displayDatePickerFormat !== DatePickerFormat.dateOnly && <ComboBox
             defaultSelectedKey='C'
             id='Basicdrop1'
             ariaLabel='Basic ComboBox example'
