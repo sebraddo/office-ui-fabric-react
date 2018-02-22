@@ -44,11 +44,28 @@ export const getStyles = memoizeFunction((
       root: {
         border: '1px solid transparent',
         margin: '0px',
-        paddingRight: '12px'
+        paddingRight: '10px'
       },
       rootHovered: {
         selectors: {
           ':hover': {
+            backgroundColor: "pink",
+            border: '1px solid rgb(226, 226, 226)'
+          }
+        }
+      },
+      rootPressed: {
+        selectors: {
+          ':focus': {
+            backgroundColor: "pink",
+            border: '1px solid rgb(226, 226, 226)'
+          }
+        }
+      },
+      rootFocused: {
+        selectors: {
+          ':focus': {
+            backgroundColor: "pink",
             border: '1px solid rgb(226, 226, 226)'
           }
         }
