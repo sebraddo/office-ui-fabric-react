@@ -78,7 +78,7 @@ export class ComboBoxBasicExample extends React.Component<{}, {
         <ComboBox
           defaultSelectedKey='C'
           label='Basic uncontrolled example (allowFreeform: T, AutoComplete: T):'
-          id='casey'
+          id='Basicdrop1'
           ariaLabel='Basic ComboBox example'
           allowFreeform={ true }
           autoComplete='on'

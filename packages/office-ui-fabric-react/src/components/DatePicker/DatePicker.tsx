@@ -2,7 +2,9 @@ import * as React from 'react';
 import {
   IDatePickerProps,
   IDatePickerStrings,
-  DatePickerFormat
+  DatePickerFormat,
+  IDatePickerStyles,
+  IDatePickertyleProps
 } from './DatePicker.types';
 import {
   Calendar,
@@ -18,15 +20,18 @@ import {
   autobind,
   BaseComponent,
   KeyCodes,
-  css
+  customizable,
+  classNamesFunction
 } from '../../Utilities';
 import { compareDates, compareDatePart } from '../../utilities/dateMath/DateMath';
-import { getStyles } from './DatePicker.Style';
-import { getClassNames, IDatePickerClassNames } from './DatePicker.className';
-import * as stylesImport from './DatePicker.scss';
-const styles: any = stylesImport;
+//import { getStyles } from './DatePicker.Style';
+//import { getClassNames, IDatePickerClassNames } from './DatePicker.className';
+//import * as stylesImport from './DatePicker.scss';
+//const styles: any = stylesImport;
 import { IIconProps } from '../Icon/Icon.types';
 import { withResponsiveMode, ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
+
+const getClassNames = classNamesFunction<IDatePickertyleProps, IDatePickerStyles>()
 
 export interface IDatePickerState {
   selectedDate?: Date;
@@ -137,7 +142,6 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
     firstWeekOfYear: FirstWeekOfYear.FirstDay,
     showGoToToday: true,
     dateTimeFormatter: undefined,
-    hasTimePicker: false,
     displayDatePickerFormat: DatePickerFormat.dateOnly
   };
 
@@ -147,7 +151,6 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
   private _textField: TextField;
   private _preventFocusOpeningPicker: boolean;
   private _focusOnSelectedDateOnUpdate: boolean;
-  private _classNames: IDatePickerClassNames;
 
   constructor(props: IDatePickerProps) {
     super(props);
@@ -221,33 +224,30 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
       minDate,
       maxDate,
       calendarProps,
-      hasTimePicker,
-      styles: customStyle,
+      timeComboboxStyles,
       responsiveMode,
-      displayDatePickerFormat
+      displayDatePickerFormat,
+      getStyles
     } = this.props;
     const { isDatePickerShown, formattedDate, selectedDate, errorMessage } = this.state;
 
-    const combinedStyle = getStyles(customStyle, responsiveMode);
-    this._classNames = getClassNames(combinedStyle, className!);
-    //TODO remove
+    const classNames = getClassNames(getStyles, { className: className! });
+
     const buttonIconProps: IIconProps = {
       iconName: 'Clock',
-      className: this._classNames.timePickerIconStyle
+      className: classNames.timePickerIconStyle
     };
 
-    const borderCombobox = ((combinedStyle.TimeCombobox as any).border === "none")
-
     return (
-      <div className={ this._classNames.root } ref={ this._resolveRef('_root') }>
+      <div className={ classNames.root } ref={ this._resolveRef('_root') }>
         { label && (
           <Label required={ isRequired }>{ label }</Label>
         ) }
-        <div className={ this._classNames.dateContainer } >
+        <div className={ classNames.dateContainer } >
           { displayDatePickerFormat !== DatePickerFormat.timeOnly &&
             <div ref={ this._resolveRef('_datepicker') }>
               <TextField
-                className={ this._classNames.dateTextField }
+                className={ classNames.dateTextField }
                 ariaLabel={ ariaLabel }
                 aria-haspopup='true'
                 aria-expanded={ isDatePickerShown }
@@ -280,7 +280,7 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
             defaultSelectedKey='C'
             id='Basicdrop1'
             ariaLabel='Basic ComboBox example'
-            styles={ combinedStyle.TimeCombobox }
+            styles={ timeComboboxStyles }
             allowFreeform={ true }
             autoComplete='on'
             options={ timeOptions }
@@ -293,7 +293,7 @@ export class DatePicker extends BaseComponent<IDatePickerProps, IDatePickerState
             role='dialog'
             ariaLabel={ pickerAriaLabel }
             isBeakVisible={ false }
-            className={ this._classNames.dateCalendar }
+            className={ classNames.dateCalendar }
             gapSpace={ 0 }
             doNotLayer={ false }
             target={ this._datepicker }

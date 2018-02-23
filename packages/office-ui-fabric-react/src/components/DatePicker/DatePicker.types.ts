@@ -4,6 +4,7 @@ import { DayOfWeek, ICalendarProps } from '../../Calendar';
 import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
 import { ICalendarFormatDateCallbacks } from '../Calendar/Calendar.types';
 import { IStyle, ITheme } from '../../Styling';
+import { IStyleFunction } from '../../Utilities';
 import { IComboBoxStyles } from '../ComboBox/ComboBox.types';
 import { IWithResponsiveModeState } from '../../utilities/decorators/withResponsiveMode';
 
@@ -173,11 +174,20 @@ export interface IDatePickerProps extends React.Props<DatePicker>, IWithResponsi
    */
   initialPickerDate?: Date;
 
-  hasTimePicker?: boolean;
+  /**
+   * This is to be removed after combobox refactoring to take getStyle functional style
+   */
+  timeComboboxStyles?: Partial<IComboBoxStyles>;
 
-  styles?: IDatePickerStyles;
-
+  /**
+   * Prop to indicate whether you want to display datepicker, timepicker or both date and time picker
+   */
   displayDatePickerFormat?: DatePickerFormat;
+
+  /**
+  * Call to provide customized styling that will layer on top of the variant rules.
+  */
+  getStyles?: IStyleFunction<IDatePickertyleProps, IDatePickerStyles>;
 }
 
 export enum DatePickerFormat {
@@ -252,24 +262,57 @@ export interface IDatePickerStrings {
   nextYearAriaLabel?: string;
 }
 
+export interface IDatePickertyleProps {
+  className?: string;
+  disabled?: boolean;
+  label?: string;
+}
+
 export interface IDatePickerStyles {
 
-  //TODO: Comments
+  /**
+   * Base styles for the root element of datepicker
+   */
   root?: IStyle;
 
+  /**
+   * Base styles for the date container
+   */
   dateContainer?: IStyle;
 
+  /**
+   * Base styles for the date text field
+   */
   dateTextField?: IStyle;
 
+  /**
+   * Base styles for the call out that wraps the calendar
+   */
   dateCallout?: IStyle;
 
+  /**
+   * Base styles for the actually Calendar
+   */
   dateCalendar?: IStyle;
 
+  /**
+   * Base styles for the time picker text field
+   */
   timepickerTextField?: IStyle;
 
+  /**
+   * Base styles for time picker combobox
+   * TODO: think of a way to cast to Partial <IComboboxStyle>
+   */
   TimeCombobox?: Partial<IComboBoxStyles>;
 
+  /**
+   * the icon renders in the date picker text field
+   */
   iconStyle?: IStyle;
 
+  /**
+   * Base styles for Icon renders in the time picker combobox
+   */
   timePickerIconStyle?: IStyle;
 }
