@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { DatePicker } from './DatePicker';
+import { DatePickerBase } from './DatePicker.base';
 import { DayOfWeek, ICalendarProps } from '../../Calendar';
 import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
 import { ICalendarFormatDateCallbacks } from '../Calendar/Calendar.types';
 import { IStyle, ITheme } from '../../Styling';
 import { IStyleFunction } from '../../Utilities';
 import { IComboBoxStyles } from '../ComboBox/ComboBox.types';
-import { IWithResponsiveModeState } from '../../utilities/decorators/withResponsiveMode';
+import { IWithResponsiveModeState, ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
 
 export interface IDatePicker {
 
 }
 
-export interface IDatePickerProps extends React.Props<DatePicker>, IWithResponsiveModeState {
+export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResponsiveModeState {
   /**
    * Optional callback to access the IDatePicker interface. Use this instead of ref for accessing
    * the public methods and properties of the component.
@@ -187,7 +187,7 @@ export interface IDatePickerProps extends React.Props<DatePicker>, IWithResponsi
   /**
   * Call to provide customized styling that will layer on top of the variant rules.
   */
-  getStyles?: IStyleFunction<IDatePickertyleProps, IDatePickerStyles>;
+  getStyles?: IStyleFunction<IDatePickerStyleProps, IDatePickerStyles>;
 }
 
 export enum DatePickerFormat {
@@ -262,7 +262,8 @@ export interface IDatePickerStrings {
   nextYearAriaLabel?: string;
 }
 
-export interface IDatePickertyleProps {
+export interface IDatePickerStyleProps {
+  responsiveMode?: ResponsiveMode;
   className?: string;
   disabled?: boolean;
   label?: string;

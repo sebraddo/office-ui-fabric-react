@@ -1,21 +1,27 @@
-import { IDatePickerProps, IDatePickerStyles } from './DatePicker.types';
+import { IDatePickerProps, IDatePickerStyles, IDatePickerStyleProps } from './DatePicker.types';
 import { memoizeFunction } from '../../Utilities';
 import { concatStyleSets, IStyle } from '../../Styling';
-import * as stylesImport from './DatePicker.scss';
+// import * as stylesImport from './DatePicker.scss';
 import { ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
-const styles: any = stylesImport;
+//const styles: any = stylesImport;
 
-export function getStyles(props: IDatePickerProps): IDatePickerStyles {
+export function getStyles(props: IDatePickerStyleProps): IDatePickerStyles {
   //By default the className only replies on the root level
   const { responsiveMode, className, disabled, label } = props;
   return {
     root: [
       'ms-DatePicker',
-      {
-        display: 'flex',
-        flexDirection: 'column'
-      },
+      // {
+      //   display: 'flex',
+      //   flexDirection: 'column'
+      // },
       className],
+    dateTextField: [
+      'ms-DatePicker-TextField',
+      disabled && {
+        pointerEvents: 'initials',
+        cursor: 'pointer'
+      }],
     iconStyle: [
       'icon-style',
       {

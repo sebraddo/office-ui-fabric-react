@@ -4,7 +4,7 @@ import {
   IDatePickerStrings,
   DatePickerFormat,
   IDatePickerStyles,
-  IDatePickertyleProps
+  IDatePickerStyleProps
 } from './DatePicker.types';
 import {
   Calendar,
@@ -27,7 +27,7 @@ import { compareDates, compareDatePart } from '../../utilities/dateMath/DateMath
 import { IIconProps } from '../Icon/Icon.types';
 import { withResponsiveMode, ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
 
-const getClassNames = classNamesFunction<IDatePickertyleProps, IDatePickerStyles>()
+const getClassNames = classNamesFunction<IDatePickerStyleProps, IDatePickerStyles>()
 
 export interface IDatePickerState {
   selectedDate?: Date;
@@ -227,7 +227,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     } = this.props;
     const { isDatePickerShown, formattedDate, selectedDate, errorMessage } = this.state;
 
-    const classNames = getClassNames(getStyles, { className: className! });
+    const classNames = getClassNames(getStyles, { className: className!, disabled, responsiveMode, label });
 
     const buttonIconProps: IIconProps = {
       iconName: 'Clock',

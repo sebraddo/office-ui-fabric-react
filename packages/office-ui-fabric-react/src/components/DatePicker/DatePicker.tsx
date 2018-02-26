@@ -1,9 +1,9 @@
 import { styled } from '../../Utilities';
 import { DatePickerBase } from './DatePicker.base';
-import { IDatePickerProps, IDatePickertyleProps, IDatePickerStyles } from './DatePicker.types';
+import { IDatePickerProps, IDatePickerStyleProps, IDatePickerStyles } from './DatePicker.types';
 import { getStyles } from './DatePicker.Style'
 
-export const DatePicker = styled<IDatePickerProps, IDatePickertyleProps, IDatePickerStyles>(
+export const DatePicker = styled<IDatePickerProps, IDatePickerStyleProps, IDatePickerStyles>(
   DatePickerBase,
   getStyles
 );
