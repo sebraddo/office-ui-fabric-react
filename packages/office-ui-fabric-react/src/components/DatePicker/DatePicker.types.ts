@@ -9,7 +9,8 @@ import { IComboBoxStyles } from '../ComboBox/ComboBox.types';
 import { IWithResponsiveModeState, ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
 
 export interface IDatePicker {
-
+  /** Sets focus to the text field */
+  focus(): void;
 }
 
 export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResponsiveModeState {
@@ -188,6 +189,11 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   * Call to provide customized styling that will layer on top of the variant rules.
   */
   getStyles?: IStyleFunction<IDatePickerStyleProps, IDatePickerStyles>;
+
+  /**
+  * Callback that runs after DatePicker's menu (Calendar) is closed
+  */
+  onAfterMenuDismiss?: () => void;
 }
 
 export enum DatePickerFormat {
