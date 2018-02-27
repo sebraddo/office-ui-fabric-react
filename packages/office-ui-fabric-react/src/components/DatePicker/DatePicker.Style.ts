@@ -1,20 +1,23 @@
-import { IDatePickerProps, IDatePickerStyles, IDatePickerStyleProps } from './DatePicker.types';
+import { IDatePickerProps, IDatePickerStyles, IDatePickerStyleProps, DatePickerFormat } from './DatePicker.types';
 import { memoizeFunction } from '../../Utilities';
 import { concatStyleSets, IStyle } from '../../Styling';
 // import * as stylesImport from './DatePicker.scss';
 import { ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
+import { IComboBox, IComboBoxStyles } from 'src/index.bundle';
 //const styles: any = stylesImport;
 
 export function getStyles(props: IDatePickerStyleProps): IDatePickerStyles {
+
+  const { displayDatePickerFormat } = props;
+  if (displayDatePickerFormat !== DatePickerFormat.dateOnly) {
+    return getDateAndTimePickerStyle(props);
+  }
+
   //By default the className only replies on the root level
   const { responsiveMode, className, disabled, label } = props;
   return {
     root: [
       'ms-DatePicker',
-      // {
-      //   display: 'flex',
-      //   flexDirection: 'column'
-      // },
       className],
     dateTextField: [
       'ms-DatePicker-TextField',
@@ -43,9 +46,8 @@ export function getStyles(props: IDatePickerStyleProps): IDatePickerStyles {
 
 
 
-export function getStylesCustomized(props: IDatePickerProps): IDatePickerStyles {
-  //By default the className only replies on the root level
-  const { responsiveMode, className, disabled, label } = props;
+export function getDateAndTimePickerStyle(props: IDatePickerStyleProps): IDatePickerStyles {
+  const { responsiveMode, className, disabled, label, displayDatePickerFormat } = props;
   return {
     root: [
       'ms-DatePicker',
@@ -79,57 +81,57 @@ export function getStylesCustomized(props: IDatePickerProps): IDatePickerStyles 
         border: '1px solid rgb(226, 226, 226)',
         boxShadow: 'none'
       }],
-    TimeCombobox:
-      {
-        root: [
-          'ms-timePicker-Combobox',
-          {
-            border: '1px solid transparent',
-            margin: '0px',
-            paddingRight: '10px'
-          }],
-        rootHovered: [
-          'ms-timePicker-Combobox-rootHovered',
-          {
-            selectors: {
-              ':hover': {
-                backgroundColor: "pink",
-                border: '1px solid rgb(226, 226, 226)'
-              }
-            }
-          }],
-        rootPressed: [
-          'ms-timePicker-Combobox-rootPressed',
-          {
-            selectors: {
-              ':focus': {
-                backgroundColor: "pink",
-                border: '1px solid rgb(226, 226, 226)'
-              }
-            }
-          }],
-        rootFocused: [
-          'ms-timePicker-Combobox-rootFocused',
-          {
-            selectors: {
-              ':focus': {
-                backgroundColor: "pink",
-                border: '1px solid rgb(226, 226, 226)'
-              }
-            }
-          }],
-        container: [
-          'ms-timePicker-Combobox-container',
-          {
-            border: '1px solid transparent'
-          }],
-        callout: [
-          'ms-timePicker-Combobox-callout',
-          {
-            boxShadow: 'none',
-            borderColor: 'rgb(226, 226, 226)'
-          }]
-      },
+    // TimeCombobox:
+    //   {
+    //     root: [
+    //       'ms-timePicker-Combobox',
+    //       {
+    //         border: '1px solid transparent',
+    //         margin: '0px',
+    //         paddingRight: '10px'
+    //       }],
+    //     rootHovered: [
+    //       'ms-timePicker-Combobox-rootHovered',
+    //       {
+    //         selectors: {
+    //           ':hover': {
+    //             backgroundColor: "pink",
+    //             border: '1px solid rgb(226, 226, 226)'
+    //           }
+    //         }
+    //       }],
+    //     rootPressed: [
+    //       'ms-timePicker-Combobox-rootPressed',
+    //       {
+    //         selectors: {
+    //           ':focus': {
+    //             backgroundColor: "pink",
+    //             border: '1px solid rgb(226, 226, 226)'
+    //           }
+    //         }
+    //       }],
+    //     rootFocused: [
+    //       'ms-timePicker-Combobox-rootFocused',
+    //       {
+    //         selectors: {
+    //           ':focus': {
+    //             backgroundColor: "pink",
+    //             border: '1px solid rgb(226, 226, 226)'
+    //           }
+    //         }
+    //       }],
+    //     container: [
+    //       'ms-timePicker-Combobox-container',
+    //       {
+    //         border: '1px solid transparent'
+    //       }],
+    //     callout: [
+    //       'ms-timePicker-Combobox-callout',
+    //       {
+    //         boxShadow: 'none',
+    //         borderColor: 'rgb(226, 226, 226)'
+    //       }]
+    //   },
     iconStyle: [
       'icon-style',
       {
@@ -153,4 +155,41 @@ export function getStylesCustomized(props: IDatePickerProps): IDatePickerStyles 
         lineHeight: "18px"
       }]
   };
+}
+
+export const defaultTimeBoxStyle: Partial<IComboBoxStyles> = {
+  root: {
+    border: '1px solid #a6a6a6',
+    margin: '0px',
+    paddingRight: '10px',
+    paddingLeft: '14px'
+  },
+  rootHovered: {
+    selectors: {
+      ':hover': {
+        border: '1px solid #a6a6a6'
+      }
+    },
+  },
+  rootPressed: {
+    selectors: {
+      ':focus': {
+        border: '1px solid #a6a6a6'
+      }
+    }
+  },
+  rootFocused: {
+    selectors: {
+      ':focus': {
+        border: '1px solid #a6a6a6'
+      }
+    }
+  },
+  container: {
+    border: '1px solid transparent'
+  },
+  callout: {
+    boxShadow: 'none',
+    borderColor: 'rgb(226, 226, 226)'
+  }
 }

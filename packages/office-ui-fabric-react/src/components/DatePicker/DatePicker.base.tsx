@@ -26,6 +26,8 @@ import {
 import { compareDates, compareDatePart } from '../../utilities/dateMath/DateMath';
 import { IIconProps } from '../Icon/Icon.types';
 import { withResponsiveMode, ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
+import { defaultTimeBoxStyle } from './DatePicker.Style'
+import { concatStyleSets } from '../../Styling';
 
 const getClassNames = classNamesFunction<IDatePickerStyleProps, IDatePickerStyles>()
 
@@ -220,19 +222,22 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
       minDate,
       maxDate,
       calendarProps,
-      timeComboboxStyles,
       responsiveMode,
       displayDatePickerFormat,
+      timeComboboxStyles,
       getStyles
     } = this.props;
     const { isDatePickerShown, formattedDate, selectedDate, errorMessage } = this.state;
-
-    const classNames = getClassNames(getStyles, { className: className!, disabled, responsiveMode, label });
+    const classNames = getClassNames(getStyles, { className: className!, disabled, responsiveMode, label, displayDatePickerFormat });
 
     const buttonIconProps: IIconProps = {
       iconName: 'Clock',
       className: classNames.timePickerIconStyle
     };
+
+
+    const timeComboboxCustomizedStyles = concatStyleSets(defaultTimeBoxStyle, timeComboboxStyles);
+
 
     return (
       <div className={ classNames.root } ref={ this._resolveRef('_root') }>
@@ -272,7 +277,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
             defaultSelectedKey='C'
             id='Basicdrop1'
             ariaLabel='Basic ComboBox example'
-            styles={ timeComboboxStyles }
+            styles={ timeComboboxCustomizedStyles }
             allowFreeform={ true }
             autoComplete='on'
             options={ timeOptions }

@@ -269,6 +269,7 @@ export interface IDatePickerStrings {
 }
 
 export interface IDatePickerStyleProps {
+  displayDatePickerFormat?: DatePickerFormat
   responsiveMode?: ResponsiveMode;
   className?: string;
   disabled?: boolean;

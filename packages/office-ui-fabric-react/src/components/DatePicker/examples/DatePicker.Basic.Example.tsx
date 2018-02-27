@@ -115,11 +115,8 @@ export class DatePickerBasicExample extends React.Component<{}, IDatePickerBasic
           selectedKey={ DayOfWeek[firstDayOfWeek!] }
           onChanged={ this._onDropdownChanged }
         />
-        {/* <DatePicker displayDatePickerFormat={ DatePickerFormat.bothDateAndDate } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
-        <DatePicker displayDatePickerFormat={ DatePickerFormat.timeOnly } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' /> */}
-        {/* <DatePickerStyled displayDatePickerFormat={ DatePickerFormat.dateOnly } borderless firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
-        <DatePickerStyled displayDatePickerFormat={ DatePickerFormat.bothDateAndDate } borderless firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
-        <DatePickerStyled displayDatePickerFormat={ DatePickerFormat.timeOnly } borderless firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' /> */}
+        <DatePicker displayDatePickerFormat={ DatePickerFormat.bothDateAndDate } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
+        <DatePicker displayDatePickerFormat={ DatePickerFormat.timeOnly } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
       </div>
     );
   }
