@@ -44,8 +44,6 @@ export function getStyles(props: IDatePickerStyleProps): IDatePickerStyles {
   };
 };
 
-
-
 export function getDateAndTimePickerStyle(props: IDatePickerStyleProps): IDatePickerStyles {
   const { responsiveMode, className, disabled, label, displayDatePickerFormat } = props;
   return {
@@ -81,57 +79,6 @@ export function getDateAndTimePickerStyle(props: IDatePickerStyleProps): IDatePi
         border: '1px solid rgb(226, 226, 226)',
         boxShadow: 'none'
       }],
-    // TimeCombobox:
-    //   {
-    //     root: [
-    //       'ms-timePicker-Combobox',
-    //       {
-    //         border: '1px solid transparent',
-    //         margin: '0px',
-    //         paddingRight: '10px'
-    //       }],
-    //     rootHovered: [
-    //       'ms-timePicker-Combobox-rootHovered',
-    //       {
-    //         selectors: {
-    //           ':hover': {
-    //             backgroundColor: "pink",
-    //             border: '1px solid rgb(226, 226, 226)'
-    //           }
-    //         }
-    //       }],
-    //     rootPressed: [
-    //       'ms-timePicker-Combobox-rootPressed',
-    //       {
-    //         selectors: {
-    //           ':focus': {
-    //             backgroundColor: "pink",
-    //             border: '1px solid rgb(226, 226, 226)'
-    //           }
-    //         }
-    //       }],
-    //     rootFocused: [
-    //       'ms-timePicker-Combobox-rootFocused',
-    //       {
-    //         selectors: {
-    //           ':focus': {
-    //             backgroundColor: "pink",
-    //             border: '1px solid rgb(226, 226, 226)'
-    //           }
-    //         }
-    //       }],
-    //     container: [
-    //       'ms-timePicker-Combobox-container',
-    //       {
-    //         border: '1px solid transparent'
-    //       }],
-    //     callout: [
-    //       'ms-timePicker-Combobox-callout',
-    //       {
-    //         boxShadow: 'none',
-    //         borderColor: 'rgb(226, 226, 226)'
-    //       }]
-    //   },
     iconStyle: [
       'icon-style',
       {
