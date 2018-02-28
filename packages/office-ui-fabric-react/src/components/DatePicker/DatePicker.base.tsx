@@ -343,6 +343,11 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
         onSelectDate(date);
       }
     });
+
+    if (this._textField) {
+      this._textField.focus();
+    }
+    this._preventFocusOpeningPicker = true;
   }
 
   @autobind
