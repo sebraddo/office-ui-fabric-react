@@ -324,6 +324,12 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     );
   }
 
+  public focus(): void {
+    if (this._textField) {
+      this._textField.focus();
+    }
+  }
+
   @autobind
   private _onSelectDate(date: Date) {
     const { formatDate, onSelectDate } = this.props;
