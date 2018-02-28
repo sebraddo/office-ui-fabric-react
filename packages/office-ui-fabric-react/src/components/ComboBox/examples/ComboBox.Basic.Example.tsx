@@ -68,7 +68,6 @@ export class ComboBoxBasicExample extends React.Component<{}, {
       callout: {
         boxShadow: 'none',
         borderColor: "black"
-        //boxSizing: "content-box"
       }
     };
 

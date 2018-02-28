@@ -65,43 +65,6 @@ export interface IDatePickerBasicExampleState {
   firstDayOfWeek?: DayOfWeek;
 }
 
-const TimeCombobox = {
-  root: {
-    border: '1px solid transparent',
-    margin: '0px',
-    paddingRight: '10px',
-    paddingLeft: '12px'
-  },
-  rootHovered: {
-    selectors: {
-      ':hover': {
-        border: '1px solid rgb(226, 226, 226)'
-      }
-    }
-  },
-  rootPressed: {
-    selectors: {
-      ':focus': {
-        border: '1px solid rgb(226, 226, 226)'
-      }
-    }
-  },
-  rootFocused: {
-    selectors: {
-      ':focus': {
-        border: '1px solid rgb(226, 226, 226)'
-      }
-    }
-  },
-  container: {
-    border: '1px solid transparent'
-  },
-  callout: {
-    boxShadow: 'none',
-    borderColor: 'rgb(226, 226, 226)'
-  }
-};
-
 export class DatePickerBasicExample extends React.Component<{}, IDatePickerBasicExampleState> {
   public constructor(props: {}) {
     super(props);
@@ -152,8 +115,6 @@ export class DatePickerBasicExample extends React.Component<{}, IDatePickerBasic
           selectedKey={ DayOfWeek[firstDayOfWeek!] }
           onChanged={ this._onDropdownChanged }
         />
-        <DatePicker borderless displayDatePickerFormat={ DatePickerFormat.bothDateAndDate } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
-        <DatePicker timeComboboxStyles={ TimeCombobox } borderless displayDatePickerFormat={ DatePickerFormat.timeOnly } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
       </div>
     );
   }

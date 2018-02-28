@@ -1,10 +1,8 @@
 import { IDatePickerProps, IDatePickerStyles, IDatePickerStyleProps, DatePickerFormat } from './DatePicker.types';
 import { memoizeFunction } from '../../Utilities';
 import { concatStyleSets, IStyle } from '../../Styling';
-// import * as stylesImport from './DatePicker.scss';
 import { ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
 import { IComboBox, IComboBoxStyles } from 'src/index.bundle';
-//const styles: any = stylesImport;
 
 export function getStyles(props: IDatePickerStyleProps): IDatePickerStyles {
 
@@ -13,7 +11,7 @@ export function getStyles(props: IDatePickerStyleProps): IDatePickerStyles {
     return getDateAndTimePickerStyle(props);
   }
 
-  //By default the className only replies on the root level
+  //Inheriting from existing behavior, classname only override on root level style
   const { responsiveMode, className, disabled, label } = props;
   return {
     root: [
@@ -104,6 +102,7 @@ export function getDateAndTimePickerStyle(props: IDatePickerStyleProps): IDatePi
   };
 }
 
+//This needs to be refactoried after combobox opt-in new mergeStyle
 export const defaultTimeBoxStyle: Partial<IComboBoxStyles> = {
   root: {
     border: '1px solid #a6a6a6',
