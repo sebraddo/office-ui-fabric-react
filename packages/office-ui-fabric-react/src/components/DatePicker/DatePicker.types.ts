@@ -5,7 +5,7 @@ import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
 import { ICalendarFormatDateCallbacks } from '../Calendar/Calendar.types';
 import { IStyle, ITheme } from '../../Styling';
 import { IStyleFunction } from '../../Utilities';
-import { IComboBoxStyles } from '../ComboBox/ComboBox.types';
+import { IComboBoxStyles, IComboBoxOption } from '../ComboBox/ComboBox.types';
 import { IWithResponsiveModeState, ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
 
 export interface IDatePicker {
@@ -186,9 +186,20 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   displayDatePickerFormat?: DatePickerFormat;
 
   /**
+   * Collection of options for this ComboBox
+   */
+  timeOptions?: IComboBoxOption[];
+
+  /**
   * Call to provide customized styling that will layer on top of the variant rules.
   */
   getStyles?: IStyleFunction<IDatePickerStyleProps, IDatePickerStyles>;
+
+  /**
+  * Callback that returns you the modified date time as a date type object
+  * Need to verify the format
+  */
+  setSelectedDateTime?: (selectedDate: Date) => void;
 
   /**
   * Callback that runs after DatePicker's menu (Calendar) is closed

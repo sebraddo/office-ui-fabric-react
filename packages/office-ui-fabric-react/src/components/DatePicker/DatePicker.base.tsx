@@ -33,6 +33,7 @@ const getClassNames = classNamesFunction<IDatePickerStyleProps, IDatePickerStyle
 
 export interface IDatePickerState {
   selectedDate?: Date;
+  selectedTime?: string;
   formattedDate?: string;
   isDatePickerShown?: boolean;
   errorMessage?: string;
@@ -96,16 +97,32 @@ const DEFAULT_STRINGS: IDatePickerStrings = {
   nextYearAriaLabel: 'Go to next year'
 };
 
-const timeOptions =
+const defaultTimeOptions =
   [
-    { key: 'Header', text: '12:00 PM' },
-    { key: 'A', text: '12:15 PM' },
-    { key: 'B', text: '12:30 PM' },
-    { key: 'C', text: '12:45 PM' },
-    { key: 'divider_2', text: '1:00 PM' },
-    { key: 'D', text: '1:30 PM' },
-    { key: 'E', text: '1"45 PM' },
-    { key: 'F', text: '2:00 PM' }
+    { key: '0', text: '12:00 PM' },
+    { key: '1', text: '13:00 PM' },
+    { key: '2', text: '14:00 PM' },
+    { key: '3', text: '15:00 PM' },
+    { key: '4', text: '16:00 PM' },
+    { key: '5', text: '17:00 PM' },
+    { key: '6', text: '18:00 PM' },
+    { key: '7', text: '19:00 PM' },
+    { key: '8', text: '20:00 PM' },
+    { key: '9', text: '21:00 PM' },
+    { key: '10', text: '22:00 PM' },
+    { key: '11', text: '23:00 PM' },
+    { key: '12', text: '00:00 AM' },
+    { key: '13', text: '1:00 AM' },
+    { key: '14', text: '2:00 AM' },
+    { key: '15', text: '3:00 AM' },
+    { key: '16', text: '4:00 AM' },
+    { key: '17', text: '5:00 AM' },
+    { key: '18', text: '6:00 AM' },
+    { key: '19', text: '7:00 AM' },
+    { key: '20', text: '8:00 AM' },
+    { key: '21', text: '9:00 AM' },
+    { key: '22', text: '10:00 AM' },
+    { key: '23', text: '11:00 AM' }
   ];
 
 @withResponsiveMode
@@ -154,9 +171,11 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     super(props);
 
     const { formatDate, value } = props;
+    const defaultTime = (this.props.displayDatePickerFormat === DatePickerFormat.dateOnly) ? defaultTimeOptions[12].text : (this.props.timeOptions ? this.props.timeOptions[0].text : defaultTimeOptions[0].text);
 
     this.state = {
       selectedDate: value || undefined,
+      selectedTime: defaultTime,
       formattedDate: (formatDate && value) ? formatDate(value) : '',
       isDatePickerShown: false,
       errorMessage: undefined
@@ -227,6 +246,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
       timeComboboxStyles,
       getStyles
     } = this.props;
+    const timeOptions = (this.props.timeOptions) ? this.props.timeOptions : defaultTimeOptions;
     const { isDatePickerShown, formattedDate, selectedDate, errorMessage } = this.state;
     const classNames = getClassNames(getStyles, { className: className!, disabled, responsiveMode, label, displayDatePickerFormat });
 
@@ -235,9 +255,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
       className: classNames.timePickerIconStyle
     };
 
-
     const timeComboboxCustomizedStyles = concatStyleSets(defaultTimeBoxStyle, timeComboboxStyles);
-
 
     return (
       <div className={ classNames.root } ref={ this._resolveRef('_root') }>
@@ -258,7 +276,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
                 onFocus={ this._onTextFieldFocus }
                 onBlur={ this._onTextFieldBlur }
                 onClick={ this._onTextFieldClick }
-                onChanged={ this._onTextFieldChanged }
+                onChanged={ this._onTextFieldDateChanged }
                 errorMessage={ errorMessage }
                 placeholder={ placeholder }
                 borderless={ borderless }
@@ -274,10 +292,12 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
               />
             </div> }
           { displayDatePickerFormat !== DatePickerFormat.dateOnly && <ComboBox
-            defaultSelectedKey='C'
+            defaultSelectedKey='0'
             id='Basicdrop1'
             ariaLabel='Basic ComboBox example'
             styles={ timeComboboxCustomizedStyles }
+            onChanged={ this._onTextFieldTimeChanged }
+            value={ this.state.selectedTime }
             allowFreeform={ true }
             autoComplete='on'
             options={ timeOptions }
@@ -344,9 +364,10 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
       }
     });
 
-    if (this._textField) {
-      this._textField.focus();
-    }
+    const modifiedTime = this.calculatingTime(this.state.selectedTime as string, date);
+    this._setSelectedDateTime(modifiedTime);
+
+    this.focus();
     this._preventFocusOpeningPicker = true;
   }
 
@@ -376,7 +397,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   }
 
   @autobind
-  private _onTextFieldChanged(newValue: string) {
+  private _onTextFieldDateChanged(newValue: string) {
     if (this.props.allowTextInput) {
       if (this.state.isDatePickerShown) {
         this._dismissDatePickerPopup();
@@ -388,6 +409,64 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
         errorMessage: (isRequired && !value) ? (strings!.isRequiredErrorMessage || '*') : undefined,
         formattedDate: newValue
       });
+    }
+  }
+
+  @autobind
+  private _onTextFieldTimeChanged(option?: IComboBoxOption, index?: number, value?: string) {
+
+    const newValue = (value) ? value : (option ? option.text : undefined);
+
+    //If user didn't pick a date yet, it's not an valid output
+    if (!this.state.selectedDate) {
+      this.setState({
+        selectedTime: newValue
+      });
+      return;
+    }
+
+    if (newValue !== this.state.selectedTime && newValue) {
+      const modifiedTime = this.calculatingTime(newValue);
+
+      this.setState({
+        selectedTime: newValue,
+        selectedDate: modifiedTime
+      });
+
+      this._setSelectedDateTime(modifiedTime);
+    }
+  }
+
+  public calculatingTime(newtime: string, newDate?: Date) {
+    const time = this._parseHourAndTime(newtime);
+    time.hour = (time.hour) ? time.hour : 0;
+    time.minute = (time.minute) ? time.minute : 0;
+
+    //Return the correct date object with the time modified
+    let updatedDate = (newDate ? newDate : this.state.selectedDate as Date);
+    updatedDate.setHours(time.hour, time.minute);
+
+    return updatedDate;
+  }
+
+  //Due to time supports user manual input
+  //Structured data model wouln't work, so we have to parse out the hour and time
+  //By default our time is xx:xx
+  private _parseHourAndTime(time: string) {
+    const indexOfSeprator = time.indexOf(':');
+
+    return {
+      hour: Number(time.substring(0, indexOfSeprator)),
+      minute: Number(time.substring(indexOfSeprator + 1, indexOfSeprator + 3))
+    };
+  }
+
+  private _setSelectedDateTime(selectedDate: Date) {
+
+    const { setSelectedDateTime } = this.props;
+    //Prop callback
+    if (setSelectedDateTime) {
+      setSelectedDateTime(selectedDate);
     }
   }
 
@@ -466,9 +545,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     this._preventFocusOpeningPicker = true;
     this._dismissDatePickerPopup();
 
-    if (this._textField) {
-      this._textField.focus();
-    }
+    this.focus();
   }
 
   @autobind

@@ -105,31 +105,9 @@ export function getDateAndTimePickerStyle(props: IDatePickerStyleProps): IDatePi
 //This needs to be refactoried after combobox opt-in new mergeStyle
 export const defaultTimeBoxStyle: Partial<IComboBoxStyles> = {
   root: {
-    border: '1px solid #a6a6a6',
     margin: '0px',
     paddingRight: '10px',
     paddingLeft: '14px'
-  },
-  rootHovered: {
-    selectors: {
-      ':hover': {
-        border: '1px solid #a6a6a6'
-      }
-    },
-  },
-  rootPressed: {
-    selectors: {
-      ':focus': {
-        border: '1px solid #a6a6a6'
-      }
-    }
-  },
-  rootFocused: {
-    selectors: {
-      ':focus': {
-        border: '1px solid #a6a6a6'
-      }
-    }
   },
   container: {
     border: '1px solid transparent'

@@ -157,7 +157,6 @@ export class TextField extends BaseComponent<ITextFieldProps, ITextFieldState> i
       ['is-required ' + styles.rootIsRequiredLabel]: this.props.label && required,
       ['is-required ' + styles.rootIsRequiredPlaceholderOnly]: !this.props.label && required,
       ['is-disabled ' + styles.rootIsDisabled]: disabled,
-      ['is-active ' + styles.rootIsActive]: isFocused,
       ['ms-TextField--multiline ' + styles.rootIsMultiline]: multiline,
       ['ms-TextField--underlined ' + styles.rootIsUnderlined]: underlined,
       ['ms-TextField--borderless ' + styles.rootIsBorderless]: borderless

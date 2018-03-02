@@ -7,6 +7,7 @@ import {
 } from '@uifabric/example-app-base';
 import { DatePickerBasicExample } from './examples/DatePicker.Basic.Example';
 import { DatePickerTimePickerExample } from './examples/DatePicker.TimePicker.Example';
+import { DatePickerOnlyTimePickerExample } from './examples/DatePicker.OnlyTimePicker.Example';
 import { DatePickerWeekNumbersExample } from './examples/DatePicker.WeekNumbers.Example';
 import { DatePickerRequiredExample } from './examples/DatePicker.Required.Example';
 import { DatePickerInputExample } from './examples/DatePicker.Input.Example';
@@ -17,6 +18,7 @@ import { DatePickerStatus } from './DatePicker.checklist';
 
 const DatePickerBasicExampleCode = require('!raw-loader!office-ui-fabric-react/src/components/DatePicker/examples/DatePicker.Basic.Example.tsx') as string;
 const DatePickerTimePickerExampleCode = require('!raw-loader!office-ui-fabric-react/src/components/DatePicker/examples/DatePicker.TimePicker.Example.tsx') as string;
+const DatePickerOnlyTimePickerExampleCode = require('!raw-loader!office-ui-fabric-react/src/components/DatePicker/examples/DatePicker.OnlyTimePicker.Example.tsx') as string;
 const DatePickerWeekNumbersExampleCode = require('!raw-loader!office-ui-fabric-react/src/components/DatePicker/examples/DatePicker.WeekNumbers.Example.tsx') as string;
 const DatePickerRequiredExampleCode = require('!raw-loader!office-ui-fabric-react/src/components/DatePicker/examples/DatePicker.Required.Example.tsx') as string;
 const DatePickerInputExampleCode = require('!raw-loader!office-ui-fabric-react/src/components/DatePicker/examples/DatePicker.Input.Example.tsx') as string;
@@ -38,6 +40,9 @@ export class DatePickerPage extends React.Component<IComponentDemoPageProps, {}>
             </ExampleCard>
             <ExampleCard title='Date and Time Picker' code={ DatePickerTimePickerExampleCode }>
               <DatePickerTimePickerExample />
+            </ExampleCard>
+            <ExampleCard title='Only Time Picker' code={ DatePickerOnlyTimePickerExampleCode }>
+              <DatePickerOnlyTimePickerExample />
             </ExampleCard>
             <ExampleCard title='DatePicker with week numbers' code={ DatePickerWeekNumbersExampleCode }>
               <DatePickerWeekNumbersExample />

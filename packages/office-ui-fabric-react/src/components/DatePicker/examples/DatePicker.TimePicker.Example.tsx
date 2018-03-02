@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { autobind } from '../../../Utilities';
-import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { DatePicker, DayOfWeek, IDatePickerStrings, DatePickerFormat } from 'office-ui-fabric-react/lib/DatePicker';
 
 const DayPickerStrings: IDatePickerStrings = {
@@ -62,43 +61,6 @@ export interface IDatePickerTimePickerExampleState {
   firstDayOfWeek?: DayOfWeek;
 }
 
-const TimeCombobox = {
-  root: {
-    border: '1px solid transparent',
-    margin: '0px',
-    paddingRight: '10px',
-    paddingLeft: '12px'
-  },
-  rootHovered: {
-    selectors: {
-      ':hover': {
-        border: '1px solid rgb(226, 226, 226)'
-      }
-    }
-  },
-  rootPressed: {
-    selectors: {
-      ':focus': {
-        border: '1px solid rgb(226, 226, 226)'
-      }
-    }
-  },
-  rootFocused: {
-    selectors: {
-      ':focus': {
-        border: '1px solid rgb(226, 226, 226)'
-      }
-    }
-  },
-  container: {
-    border: '1px solid transparent'
-  },
-  callout: {
-    boxShadow: 'none',
-    borderColor: 'rgb(226, 226, 226)'
-  }
-};
-
 export class DatePickerTimePickerExample extends React.Component<{}, IDatePickerTimePickerExampleState> {
   public constructor(props: {}) {
     super(props);
@@ -108,12 +70,15 @@ export class DatePickerTimePickerExample extends React.Component<{}, IDatePicker
     };
   }
 
+  private _timeChangeCallback(date: Date) {
+    console.log(date);
+  }
+
   public render() {
     const { firstDayOfWeek } = this.state;
 
     return (<div>
-      <DatePicker displayDatePickerFormat={ DatePickerFormat.bothDateAndDate } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
-      <DatePicker timeComboboxStyles={ TimeCombobox } borderless displayDatePickerFormat={ DatePickerFormat.timeOnly } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
+      <DatePicker setSelectedDateTime={ this._timeChangeCallback } displayDatePickerFormat={ DatePickerFormat.bothDateAndDate } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
     </div>);
   }
 }
