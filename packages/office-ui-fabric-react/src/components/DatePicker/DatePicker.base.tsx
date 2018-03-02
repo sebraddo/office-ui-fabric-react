@@ -99,30 +99,31 @@ const DEFAULT_STRINGS: IDatePickerStrings = {
 
 const defaultTimeOptions =
   [
-    { key: '0', text: '12:00 PM' },
-    { key: '1', text: '13:00 PM' },
-    { key: '2', text: '14:00 PM' },
-    { key: '3', text: '15:00 PM' },
-    { key: '4', text: '16:00 PM' },
-    { key: '5', text: '17:00 PM' },
-    { key: '6', text: '18:00 PM' },
-    { key: '7', text: '19:00 PM' },
-    { key: '8', text: '20:00 PM' },
-    { key: '9', text: '21:00 PM' },
-    { key: '10', text: '22:00 PM' },
-    { key: '11', text: '23:00 PM' },
-    { key: '12', text: '00:00 AM' },
-    { key: '13', text: '1:00 AM' },
-    { key: '14', text: '2:00 AM' },
-    { key: '15', text: '3:00 AM' },
-    { key: '16', text: '4:00 AM' },
-    { key: '17', text: '5:00 AM' },
-    { key: '18', text: '6:00 AM' },
-    { key: '19', text: '7:00 AM' },
-    { key: '20', text: '8:00 AM' },
-    { key: '21', text: '9:00 AM' },
-    { key: '22', text: '10:00 AM' },
-    { key: '23', text: '11:00 AM' }
+    { key: '0', text: '1:00 AM' },
+    { key: '1', text: '2:00 AM' },
+    { key: '2', text: '3:00 AM' },
+    { key: '3', text: '4:00 AM' },
+    { key: '4', text: '5:00 AM' },
+    { key: '5', text: '6:00 AM' },
+    { key: '6', text: '7:00 AM' },
+    { key: '7', text: '8:00 AM' },
+    { key: '8', text: '9:00 AM' },
+    { key: '9', text: '10:00 AM' },
+    { key: '10', text: '11:00 AM' },
+    { key: '11', text: '12:00 PM' },
+    { key: '12', text: '1:00 PM' },
+    { key: '13', text: '2:00 PM' },
+    { key: '14', text: '3:00 PM' },
+    { key: '15', text: '4:00 PM' },
+    { key: '16', text: '5:00 PM' },
+    { key: '17', text: '6:00 PM' },
+    { key: '18', text: '7:00 PM' },
+    { key: '19', text: '8:00 PM' },
+    { key: '20', text: '9:00 PM' },
+    { key: '21', text: '10:00 PM' },
+    { key: '22', text: '11:00 PM' },
+    { key: '23', text: '12:00 AM' },
+
   ];
 
 @withResponsiveMode
@@ -171,7 +172,8 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     super(props);
 
     const { formatDate, value } = props;
-    const defaultTime = (this.props.displayDatePickerFormat === DatePickerFormat.dateOnly) ? defaultTimeOptions[12].text : (this.props.timeOptions ? this.props.timeOptions[0].text : defaultTimeOptions[0].text);
+    const defaultSelectedTimeKey = (this.props.defaultSelectedTimeKey) ? this.props.defaultSelectedTimeKey : 0;
+    const defaultTime = (this.props.displayDatePickerFormat === DatePickerFormat.dateOnly) ? defaultTimeOptions[12].text : (this.props.timeOptions ? this.props.timeOptions[defaultSelectedTimeKey].text : defaultTimeOptions[10].text);
 
     this.state = {
       selectedDate: value || undefined,
@@ -292,7 +294,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
               />
             </div> }
           { displayDatePickerFormat !== DatePickerFormat.dateOnly && <ComboBox
-            defaultSelectedKey='0'
+            defaultSelectedKey={ this.props.defaultSelectedTimeKey ? this.props.defaultSelectedTimeKey : '10' }
             id='Basicdrop1'
             ariaLabel='Basic ComboBox example'
             styles={ timeComboboxCustomizedStyles }
@@ -438,9 +440,12 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   }
 
   public calculatingTime(newtime: string, newDate?: Date) {
-    const time = this._parseHourAndTime(newtime);
-    time.hour = (time.hour) ? time.hour : 0;
-    time.minute = (time.minute) ? time.minute : 0;
+
+    const { timeOptions, customizeTimeConverter } = this.props;
+
+    //Make sure when both props are supplied we call customize time converter
+    //Otherwise we will still try use default converter
+    const time = (timeOptions && customizeTimeConverter) ? customizeTimeConverter(newtime) : this._parseHourAndTime(newtime);
 
     //Return the correct date object with the time modified
     let updatedDate = (newDate ? newDate : this.state.selectedDate as Date);
@@ -454,10 +459,19 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   //By default our time is xx:xx
   private _parseHourAndTime(time: string) {
     const indexOfSeprator = time.indexOf(':');
+    let hour = Number(time.substring(0, indexOfSeprator)), minute = Number(time.substring(indexOfSeprator + 1, indexOfSeprator + 3));
+
+    //Invalid input return default value
+    hour = (hour) ? hour : 0;
+    minute = (minute) ? minute : 0;
+
+    if (time.indexOf('PM') > -1) {
+      hour = hour + 12;
+    }
 
     return {
-      hour: Number(time.substring(0, indexOfSeprator)),
-      minute: Number(time.substring(indexOfSeprator + 1, indexOfSeprator + 3))
+      hour,
+      minute
     };
   }
 

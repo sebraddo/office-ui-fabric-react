@@ -191,6 +191,18 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   timeOptions?: IComboBoxOption[];
 
   /**
+   * Default display and selected key of time options
+   */
+  defaultSelectedTimeKey?: number;
+
+  /**
+   * If you supply your own timeOptions, please provide a corresponding converter
+   * Input time as a string return from combobox
+   * Output hour as number and minute as number
+   */
+  customizeTimeConverter?: (time: string) => { hour: number, minute: number };
+
+  /**
   * Call to provide customized styling that will layer on top of the variant rules.
   */
   getStyles?: IStyleFunction<IDatePickerStyleProps, IDatePickerStyles>;
