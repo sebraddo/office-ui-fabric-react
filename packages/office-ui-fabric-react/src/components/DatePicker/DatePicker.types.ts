@@ -211,7 +211,7 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   * Callback that returns you the modified date time as a date type object
   * Need to verify the format
   */
-  setSelectedDateTime?: (selectedDate: Date) => void;
+  setSelectedDateTime?: (selectedDate: Date | null | undefined) => void;
 
   /**
   * Callback that runs after DatePicker's menu (Calendar) is closed
@@ -330,12 +330,6 @@ export interface IDatePickerStyles {
    * Base styles for the time picker text field
    */
   timepickerTextField?: IStyle;
-
-  /**
-   * Base styles for time picker combobox
-   * TODO: think of a way to cast to Partial <IComboboxStyle>
-   */
-  TimeCombobox?: Partial<IComboBoxStyles>;
 
   /**
    * the icon renders in the date picker text field
