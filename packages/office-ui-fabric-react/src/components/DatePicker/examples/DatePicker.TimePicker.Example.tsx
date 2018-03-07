@@ -70,15 +70,18 @@ export class DatePickerTimePickerExample extends React.Component<{}, IDatePicker
     };
   }
 
+  public render() {
+    const { firstDayOfWeek } = this.state;
+
+    return (
+      <div>
+        <DatePicker setSelectedDateTime={ this._timeChangeCallback } displayDatePickerFormat={ DatePickerFormat.bothDateAndDate } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
+      </div>
+    );
+  }
+
   private _timeChangeCallback(date: Date) {
     console.log(date);
   }
 
-  public render() {
-    const { firstDayOfWeek } = this.state;
-
-    return (<div>
-      <DatePicker setSelectedDateTime={ this._timeChangeCallback } displayDatePickerFormat={ DatePickerFormat.bothDateAndDate } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
-    </div>);
-  }
 }

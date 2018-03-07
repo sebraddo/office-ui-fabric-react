@@ -14,7 +14,7 @@ import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
 import { Callout } from '../../Callout';
 import { DirectionalHint } from '../../common/DirectionalHint';
 import { TextField } from '../../TextField';
-import { ComboBox, IComboBoxProps, IComboBoxOption, } from '../ComboBox'
+import { ComboBox, IComboBoxProps, IComboBoxOption, } from '../ComboBox';
 import { Label } from '../../Label';
 import {
   autobind,
@@ -26,10 +26,10 @@ import {
 import { compareDates, compareDatePart } from '../../utilities/dateMath/DateMath';
 import { IIconProps } from '../Icon/Icon.types';
 import { withResponsiveMode, ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
-import { defaultTimeBoxStyle } from './DatePicker.Style'
+import { defaultTimeBoxStyle } from './DatePicker.Style';
 import { concatStyleSets } from '../../Styling';
 
-const getClassNames = classNamesFunction<IDatePickerStyleProps, IDatePickerStyles>()
+const getClassNames = classNamesFunction<IDatePickerStyleProps, IDatePickerStyles>();
 
 export interface IDatePickerState {
   selectedDate?: Date;
@@ -220,9 +220,21 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     }
   }
 
-  private _renderTimePicker() {
+  public calculatingTime(newtime: string, newDate?: Date) {
+    const time = this._parseHourAndTime(newtime);
+    time.hour = (time.hour) ? time.hour : 0;
+    time.minute = (time.minute) ? time.minute : 0;
 
+    // Return the correct date object with the time modified
+    const updatedDate = (newDate ? newDate : this.state.selectedDate as Date);
+    updatedDate.setHours(time.hour, time.minute);
+
+    return updatedDate;
   }
+
+  // private _renderTimePicker() {
+
+  // }
 
   public render() {
     const {
@@ -417,7 +429,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
     const newValue = (value) ? value : (option ? option.text : undefined);
 
-    //If user didn't pick a date yet, it's not an valid output
+    // If user didn't pick a date yet, it's not an valid output
     if (!this.state.selectedDate) {
       this.setState({
         selectedTime: newValue
@@ -437,21 +449,9 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     }
   }
 
-  public calculatingTime(newtime: string, newDate?: Date) {
-    const time = this._parseHourAndTime(newtime);
-    time.hour = (time.hour) ? time.hour : 0;
-    time.minute = (time.minute) ? time.minute : 0;
-
-    //Return the correct date object with the time modified
-    let updatedDate = (newDate ? newDate : this.state.selectedDate as Date);
-    updatedDate.setHours(time.hour, time.minute);
-
-    return updatedDate;
-  }
-
-  //Due to time supports user manual input
-  //Structured data model wouln't work, so we have to parse out the hour and time
-  //By default our time is xx:xx
+  // Due to time supports user manual input
+  // Structured data model wouln't work, so we have to parse out the hour and time
+  // By default our time is xx:xx
   private _parseHourAndTime(time: string) {
     const indexOfSeprator = time.indexOf(':');
 
@@ -464,7 +464,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   private _setSelectedDateTime(selectedDate: Date) {
 
     const { setSelectedDateTime } = this.props;
-    //Prop callback
+    // Prop callback
     if (setSelectedDateTime) {
       setSelectedDateTime(selectedDate);
     }

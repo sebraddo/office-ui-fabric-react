@@ -11,7 +11,7 @@ export function getStyles(props: IDatePickerStyleProps): IDatePickerStyles {
     return getDateAndTimePickerStyle(props);
   }
 
-  //Inheriting from existing behavior, classname only override on root level style
+  // Inheriting from existing behavior, classname only override on root level style
   const { responsiveMode, className, disabled, label } = props;
   return {
     root: [
@@ -40,7 +40,7 @@ export function getStyles(props: IDatePickerStyleProps): IDatePickerStyles {
       }
     ]
   };
-};
+}
 
 export function getDateAndTimePickerStyle(props: IDatePickerStyleProps): IDatePickerStyles {
   const { responsiveMode, className, disabled, label, displayDatePickerFormat } = props;
@@ -96,13 +96,13 @@ export function getDateAndTimePickerStyle(props: IDatePickerStyleProps): IDatePi
     timePickerIconStyle: [
       'ms-timepicker-icon',
       {
-        fontSize: "16px",
-        lineHeight: "18px"
+        fontSize: '16px',
+        lineHeight: '18px',
       }]
   };
 }
 
-//This needs to be refactoried after combobox opt-in new mergeStyle
+// This needs to be refactored after combobox opt-in new mergeStyle
 export const defaultTimeBoxStyle: Partial<IComboBoxStyles> = {
   root: {
     margin: '0px',
@@ -116,4 +116,4 @@ export const defaultTimeBoxStyle: Partial<IComboBoxStyles> = {
     boxShadow: 'none',
     borderColor: 'rgb(226, 226, 226)'
   }
-}
+};
