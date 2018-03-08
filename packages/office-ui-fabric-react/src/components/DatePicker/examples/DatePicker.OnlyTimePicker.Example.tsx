@@ -52,11 +52,15 @@ export class DatePickerOnlyTimePickerExample extends React.Component<{}, IDatePi
     };
   }
 
+  private _timeChangeCallback(date: Date) {
+    console.log(date);
+  }
+
   public render() {
     const { firstDayOfWeek } = this.state;
 
     return (<div>
-      <DatePicker timeComboboxStyles={ TimeCombobox } borderless displayDatePickerFormat={ DatePickerFormat.bothDateAndDate } firstDayOfWeek={ firstDayOfWeek } allowTextInput showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
+      <DatePicker setSelectedDateTime={ this._timeChangeCallback } timeComboboxStyles={ TimeCombobox } borderless displayDatePickerFormat={ DatePickerFormat.timeOnly } firstDayOfWeek={ firstDayOfWeek } allowTextInput showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
     </div>);
   }
 }

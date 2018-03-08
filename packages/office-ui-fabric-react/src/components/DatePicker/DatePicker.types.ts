@@ -217,6 +217,11 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   * Callback that runs after DatePicker's menu (Calendar) is closed
   */
   onAfterMenuDismiss?: () => void;
+
+  /**
+  * For time picker scenario, a default date is provided to return a proper date object
+  */
+  defaultDate?: Date;
 }
 
 export enum DatePickerFormat {

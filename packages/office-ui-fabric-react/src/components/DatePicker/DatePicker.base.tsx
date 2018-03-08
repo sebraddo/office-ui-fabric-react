@@ -420,25 +420,42 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   @autobind
   private _onTextFieldTimeChanged(option?: IComboBoxOption, index?: number, value?: string) {
 
-    const newValue = (value) ? value : (option ? option.text : undefined);
+    const newValue = (value !== undefined) ? value : (option ? option.text : undefined);
+    const isTimeChanged = newValue !== this.state.selectedTime && newValue !== undefined;
 
-    //If user didn't pick a date yet, it's not an valid output
-    if (!this.state.selectedDate) {
-      this.setState({
-        selectedTime: newValue
-      });
-      return;
+    if (this.props.displayDatePickerFormat === DatePickerFormat.bothDateAndDate) {
+      //If user didn't pick a date yet, it's not an valid output
+      if (!this.state.selectedDate) {
+        this.setState({
+          selectedTime: newValue
+        });
+        return;
+      }
+
+      if (isTimeChanged) {
+        const modifiedTime = this.calculatingTime(newValue!);
+
+        this.setState({
+          selectedTime: newValue,
+          selectedDate: modifiedTime
+        });
+
+        this.setSelectedDateTime(modifiedTime);
+      }
     }
+    //For most scenarios only showing time picker indicates there's a default date implying somewhere in the system
+    // So we are allowing user to provide the default date themselves
+    else {
+      if (isTimeChanged) {
+        const defaultDate = this.props.defaultDate ? this.props.defaultDate : new Date();
+        const modifiedTime = this.calculatingTime(newValue!, defaultDate);
 
-    if (newValue !== this.state.selectedTime && newValue) {
-      const modifiedTime = this.calculatingTime(newValue);
+        this.setState({
+          selectedTime: newValue
+        });
 
-      this.setState({
-        selectedTime: newValue,
-        selectedDate: modifiedTime
-      });
-
-      this.setSelectedDateTime(modifiedTime);
+        this.setSelectedDateTime(modifiedTime);
+      }
     }
   }
 
@@ -451,7 +468,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     const time = (timeOptions && customizeTimeConverter) ? customizeTimeConverter(newtime) : this._parseHourAndTime(newtime);
 
     //Return the correct date object with the time modified
-    let updatedDate = (newDate ? newDate : this.state.selectedDate as Date);
+    let updatedDate = (newDate ? newDate : this.state.selectedDate!);
     updatedDate.setHours(time.hour, time.minute);
 
     return updatedDate;
@@ -592,6 +609,20 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
     if (allowTextInput) {
       let date = null;
+
+      //When user deletes calendar value
+      //We should still set the proper state but no formatting needed
+      //TODO: should we fire unchange event? If that's the case what to fire?
+      //Only null value or mininum date with time
+      if (inputValue !== undefined && inputValue === '' && this.state.selectedDate !== undefined) {
+        this.setState({
+          selectedDate: undefined
+        });
+
+        return;
+      }
+
+
       if (inputValue) {
         // Don't parse if the selected date has the same formatted string as what we're about to parse.
         // The formatted string might be ambiguous (ex: "1/2/3" or "New Year Eve") and the parser might
