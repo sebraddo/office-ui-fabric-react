@@ -63,11 +63,11 @@ export class ComboBoxBasicExample extends React.Component<{}, {
   }
 
   public render() {
-    let { options, selectedOptionKey, value } = this.state;
-    let rootStyle: Partial<IComboBoxStyles> = {
+    const { options, selectedOptionKey, value } = this.state;
+    const rootStyle: Partial<IComboBoxStyles> = {
       callout: {
         boxShadow: 'none',
-        borderColor: "black"
+        borderColor: 'black'
       }
     };
 
