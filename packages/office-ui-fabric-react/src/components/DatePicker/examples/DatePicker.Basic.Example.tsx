@@ -125,7 +125,6 @@ export class DatePickerBasicExample extends React.Component<{}, IDatePickerBasic
 
   private onAfterMenuDismissLog() {
     console.log("onAfterMenuDismiss called");
-    return;
   }
 
   @autobind
