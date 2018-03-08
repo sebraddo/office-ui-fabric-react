@@ -79,7 +79,7 @@ export class DatePickerBasicExample extends React.Component<{}, IDatePickerBasic
 
     return (
       <div>
-        <DatePicker displayDatePickerFormat={ DatePickerFormat.dateOnly } setSelectedDateTime={ this._timeChangeCallback } firstDayOfWeek={ firstDayOfWeek } onAfterMenuDismiss={ this.onAfterMenuDismissLog } allowTextInput strings={ DayPickerStrings } showGoToToday isMonthPickerVisible placeholder='Select a date...' />
+        <DatePicker displayDatePickerFormat={ DatePickerFormat.dateOnly } setSelectedDateTime={ this._timeChangeCallback } firstDayOfWeek={ firstDayOfWeek } onAfterMenuDismiss={ this._onAfterMenuDismissLog } allowTextInput strings={ DayPickerStrings } showGoToToday isMonthPickerVisible placeholder='Select a date...' />
         <Dropdown
           label='Select the first day of the week'
           options={ [
@@ -123,7 +123,7 @@ export class DatePickerBasicExample extends React.Component<{}, IDatePickerBasic
     console.log(date);
   }
 
-  private onAfterMenuDismissLog() {
+  private _onAfterMenuDismissLog() {
     console.log("onAfterMenuDismiss called");
   }
 
