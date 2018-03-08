@@ -232,10 +232,6 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     return updatedDate;
   }
 
-  // private _renderTimePicker() {
-
-  // }
-
   public render() {
     const {
       firstDayOfWeek,
