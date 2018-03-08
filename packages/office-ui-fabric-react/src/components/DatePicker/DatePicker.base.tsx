@@ -8,6 +8,7 @@ import {
 } from './DatePicker.types';
 import {
   Calendar,
+  ICalendar,
   DayOfWeek
 } from '../../Calendar';
 import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
@@ -99,30 +100,31 @@ const DEFAULT_STRINGS: IDatePickerStrings = {
 
 const defaultTimeOptions =
   [
-    { key: '0', text: '12:00 PM' },
-    { key: '1', text: '13:00 PM' },
-    { key: '2', text: '14:00 PM' },
-    { key: '3', text: '15:00 PM' },
-    { key: '4', text: '16:00 PM' },
-    { key: '5', text: '17:00 PM' },
-    { key: '6', text: '18:00 PM' },
-    { key: '7', text: '19:00 PM' },
-    { key: '8', text: '20:00 PM' },
-    { key: '9', text: '21:00 PM' },
-    { key: '10', text: '22:00 PM' },
-    { key: '11', text: '23:00 PM' },
-    { key: '12', text: '00:00 AM' },
-    { key: '13', text: '1:00 AM' },
-    { key: '14', text: '2:00 AM' },
-    { key: '15', text: '3:00 AM' },
-    { key: '16', text: '4:00 AM' },
-    { key: '17', text: '5:00 AM' },
-    { key: '18', text: '6:00 AM' },
-    { key: '19', text: '7:00 AM' },
-    { key: '20', text: '8:00 AM' },
-    { key: '21', text: '9:00 AM' },
-    { key: '22', text: '10:00 AM' },
-    { key: '23', text: '11:00 AM' }
+    { key: '0', text: '1:00 AM' },
+    { key: '1', text: '2:00 AM' },
+    { key: '2', text: '3:00 AM' },
+    { key: '3', text: '4:00 AM' },
+    { key: '4', text: '5:00 AM' },
+    { key: '5', text: '6:00 AM' },
+    { key: '6', text: '7:00 AM' },
+    { key: '7', text: '8:00 AM' },
+    { key: '8', text: '9:00 AM' },
+    { key: '9', text: '10:00 AM' },
+    { key: '10', text: '11:00 AM' },
+    { key: '11', text: '12:00 PM' },
+    { key: '12', text: '1:00 PM' },
+    { key: '13', text: '2:00 PM' },
+    { key: '14', text: '3:00 PM' },
+    { key: '15', text: '4:00 PM' },
+    { key: '16', text: '5:00 PM' },
+    { key: '17', text: '6:00 PM' },
+    { key: '18', text: '7:00 PM' },
+    { key: '19', text: '8:00 PM' },
+    { key: '20', text: '9:00 PM' },
+    { key: '21', text: '10:00 PM' },
+    { key: '22', text: '11:00 PM' },
+    { key: '23', text: '12:00 AM' },
+
   ];
 
 @withResponsiveMode
@@ -161,9 +163,9 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   };
 
   private _root: HTMLElement;
-  private _calendar: Calendar;
-  private _datepicker: HTMLDivElement;
-  private _textField: TextField;
+  private _calendar: ICalendar;
+  private _datePickerDiv: HTMLDivElement;
+  private _textField: ITextField;
   private _preventFocusOpeningPicker: boolean;
   private _focusOnSelectedDateOnUpdate: boolean;
 
@@ -171,7 +173,8 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     super(props);
 
     const { formatDate, value } = props;
-    const defaultTime = (this.props.displayDatePickerFormat === DatePickerFormat.dateOnly) ? defaultTimeOptions[12].text : (this.props.timeOptions ? this.props.timeOptions[0].text : defaultTimeOptions[0].text);
+    const defaultSelectedTimeKey = (this.props.defaultSelectedTimeKey) ? this.props.defaultSelectedTimeKey : 0;
+    const defaultTime = (this.props.displayDatePickerFormat === DatePickerFormat.dateOnly) ? defaultTimeOptions[12].text : (this.props.timeOptions ? this.props.timeOptions[defaultSelectedTimeKey].text : defaultTimeOptions[10].text);
 
     this.state = {
       selectedDate: value || undefined,
@@ -272,7 +275,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
         ) }
         <div className={ classNames.dateContainer } >
           { displayDatePickerFormat !== DatePickerFormat.timeOnly &&
-            <div ref={ this._resolveRef('_datepicker') }>
+            <div ref={ this._resolveRef('_datePickerDiv') }>
               <TextField
                 className={ classNames.dateTextField }
                 ariaLabel={ ariaLabel }
@@ -295,12 +298,12 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
                 } }
                 readOnly={ !allowTextInput }
                 value={ formattedDate }
-                ref={ this._resolveRef('_textField') }
+                componentRef={ this._resolveRef('_textField') }
                 role={ allowTextInput ? 'combobox' : 'menu' }
               />
             </div> }
           { displayDatePickerFormat !== DatePickerFormat.dateOnly && <ComboBox
-            defaultSelectedKey='0'
+            defaultSelectedKey={ this.props.defaultSelectedTimeKey ? this.props.defaultSelectedTimeKey : '10' }
             id='Basicdrop1'
             ariaLabel='Basic ComboBox example'
             styles={ timeComboboxCustomizedStyles }
@@ -321,7 +324,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
             className={ classNames.dateCalendar }
             gapSpace={ 0 }
             doNotLayer={ false }
-            target={ this._datepicker }
+            target={ this._datePickerDiv }
             directionalHint={ DirectionalHint.bottomLeftEdge }
             onDismiss={ this._calendarDismissed }
             onPositioned={ this._onCalloutPositioned }
@@ -343,7 +346,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
               dateTimeFormatter={ this.props.dateTimeFormatter }
               minDate={ minDate }
               maxDate={ maxDate }
-              ref={ this._resolveRef('_calendar') }
+              componentRef={ this._resolveRef('_calendar') }
             />
           </Callout>
         )
@@ -366,14 +369,14 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
       selectedDate: date,
       isDatePickerShown: false,
       formattedDate: formatDate && date ? formatDate(date) : '',
-    }, () => {
-      if (onSelectDate) {
-        onSelectDate(date);
-      }
     });
 
+    if (onSelectDate) {
+      onSelectDate(date);
+    }
+
     const modifiedTime = this.calculatingTime(this.state.selectedTime as string, date);
-    this._setSelectedDateTime(modifiedTime);
+    this.setSelectedDateTime(modifiedTime);
 
     this.focus();
     this._preventFocusOpeningPicker = true;
@@ -411,8 +414,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
         this._dismissDatePickerPopup();
       }
 
-      const { isRequired, value, strings } = this.props;
-
+      const { isRequired, value, strings, parseDateFromString } = this.props;
       this.setState({
         errorMessage: (isRequired && !value) ? (strings!.isRequiredErrorMessage || '*') : undefined,
         formattedDate: newValue
@@ -423,25 +425,42 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   @autobind
   private _onTextFieldTimeChanged(option?: IComboBoxOption, index?: number, value?: string) {
 
-    const newValue = (value) ? value : (option ? option.text : undefined);
+    const newValue = (value !== undefined) ? value : (option ? option.text : undefined);
+    const isTimeChanged = newValue !== this.state.selectedTime && newValue !== undefined;
 
-    // If user didn't pick a date yet, it's not an valid output
-    if (!this.state.selectedDate) {
-      this.setState({
-        selectedTime: newValue
-      });
-      return;
+    if (this.props.displayDatePickerFormat === DatePickerFormat.bothDateAndDate) {
+      // If user didn't pick a date yet, it's not an valid output
+      if (!this.state.selectedDate) {
+        this.setState({
+          selectedTime: newValue
+        });
+        return;
+      }
+
+      if (isTimeChanged) {
+        const modifiedTime = this.calculatingTime(newValue!);
+
+        this.setState({
+          selectedTime: newValue,
+          selectedDate: modifiedTime
+        });
+
+        this.setSelectedDateTime(modifiedTime);
+      }
     }
+    //For most scenarios only showing time picker indicates there's a default date implying somewhere in the system
+    // So we are allowing user to provide the default date themselves
+    else {
+      if (isTimeChanged) {
+        const defaultDate = this.props.defaultDate ? this.props.defaultDate : new Date();
+        const modifiedTime = this.calculatingTime(newValue!, defaultDate);
 
-    if (newValue !== this.state.selectedTime && newValue) {
-      const modifiedTime = this.calculatingTime(newValue);
+        this.setState({
+          selectedTime: newValue
+        });
 
-      this.setState({
-        selectedTime: newValue,
-        selectedDate: modifiedTime
-      });
-
-      this._setSelectedDateTime(modifiedTime);
+        this.setSelectedDateTime(modifiedTime);
+      }
     }
   }
 
@@ -450,14 +469,23 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   // By default our time is xx:xx
   private _parseHourAndTime(time: string) {
     const indexOfSeprator = time.indexOf(':');
+    let hour = Number(time.substring(0, indexOfSeprator)), minute = Number(time.substring(indexOfSeprator + 1, indexOfSeprator + 3));
+
+    //Invalid input return default value
+    hour = (hour) ? hour : 0;
+    minute = (minute) ? minute : 0;
+
+    if (time.indexOf('PM') > -1) {
+      hour = hour + 12;
+    }
 
     return {
-      hour: Number(time.substring(0, indexOfSeprator)),
-      minute: Number(time.substring(indexOfSeprator + 1, indexOfSeprator + 3))
+      hour,
+      minute
     };
   }
 
-  private _setSelectedDateTime(selectedDate: Date) {
+  public setSelectedDateTime(selectedDate: Date | undefined | null) {
 
     const { setSelectedDateTime } = this.props;
     // Prop callback
@@ -571,6 +599,20 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
     if (allowTextInput) {
       let date = null;
+
+      //When user deletes calendar value
+      //We should still set the proper state but no formatting needed
+      //TODO: should we fire unchange event? If that's the case what to fire?
+      //Only null value or mininum date with time
+      if (inputValue !== undefined && inputValue === '' && this.state.selectedDate !== undefined) {
+        this.setState({
+          selectedDate: undefined
+        });
+
+        return;
+      }
+
+
       if (inputValue) {
         // Don't parse if the selected date has the same formatted string as what we're about to parse.
         // The formatted string might be ambiguous (ex: "1/2/3" or "New Year Eve") and the parser might
@@ -617,19 +659,21 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
             }
           }
         }
+        const newDate = this.calculatingTime(this.state.selectedTime!, date as Date);
       } else {
         // No input date string shouldn't be an error if field is not required
         this.setState({
           errorMessage: ''
         });
       }
-
       // Execute onSelectDate callback
       if (onSelectDate) {
         // If no input date string or input date string is invalid
         // date variable will be null, callback should expect null value for this case
         onSelectDate(date);
       }
+
+      this.setSelectedDateTime(date);
     }
   }
 

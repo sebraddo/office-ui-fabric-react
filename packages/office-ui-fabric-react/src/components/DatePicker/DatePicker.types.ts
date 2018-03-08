@@ -191,6 +191,18 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   timeOptions?: IComboBoxOption[];
 
   /**
+   * Default display and selected key of time options
+   */
+  defaultSelectedTimeKey?: number;
+
+  /**
+   * If you supply your own timeOptions, please provide a corresponding converter
+   * Input time as a string return from combobox
+   * Output hour as number and minute as number
+   */
+  customizeTimeConverter?: (time: string) => { hour: number, minute: number };
+
+  /**
   * Call to provide customized styling that will layer on top of the variant rules.
   */
   getStyles?: IStyleFunction<IDatePickerStyleProps, IDatePickerStyles>;
@@ -199,12 +211,17 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   * Callback that returns you the modified date time as a date type object
   * Need to verify the format
   */
-  setSelectedDateTime?: (selectedDate: Date) => void;
+  setSelectedDateTime?: (selectedDate: Date | null | undefined) => void;
 
   /**
   * Callback that runs after DatePicker's menu (Calendar) is closed
   */
   onAfterMenuDismiss?: () => void;
+
+  /**
+  * For time picker scenario, a default date is provided to return a proper date object
+  */
+  defaultDate?: Date;
 }
 
 export enum DatePickerFormat {
@@ -318,12 +335,6 @@ export interface IDatePickerStyles {
    * Base styles for the time picker text field
    */
   timepickerTextField?: IStyle;
-
-  /**
-   * Base styles for time picker combobox
-   * TODO: think of a way to cast to Partial <IComboboxStyle>
-   */
-  TimeCombobox?: Partial<IComboBoxStyles>;
 
   /**
    * the icon renders in the date picker text field

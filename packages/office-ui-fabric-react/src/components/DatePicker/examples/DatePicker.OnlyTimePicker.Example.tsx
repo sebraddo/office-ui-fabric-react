@@ -52,6 +52,10 @@ export class DatePickerOnlyTimePickerExample extends React.Component<{}, IDatePi
     };
   }
 
+  private _timeChangeCallback(date: Date) {
+    console.log(date);
+  }
+
   public render() {
     const { firstDayOfWeek } = this.state;
 
