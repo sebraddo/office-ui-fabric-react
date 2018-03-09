@@ -48,8 +48,7 @@ export function getDateAndTimePickerStyle(props: IDatePickerStyleProps): IDatePi
     root: [
       'ms-DatePicker',
       {
-        display: 'flex',
-        flexDirection: 'column'
+        display: 'flex'
       },
       className],
     dateContainer: [

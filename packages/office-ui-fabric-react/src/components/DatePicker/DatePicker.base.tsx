@@ -14,7 +14,7 @@ import {
 import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
 import { Callout } from '../../Callout';
 import { DirectionalHint } from '../../common/DirectionalHint';
-import { TextField } from '../../TextField';
+import { TextField, ITextField } from '../../TextField';
 import { ComboBox, IComboBoxProps, IComboBoxOption, } from '../ComboBox';
 import { Label } from '../../Label';
 import {
@@ -602,7 +602,6 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
       //When user deletes calendar value
       //We should still set the proper state but no formatting needed
-      //TODO: should we fire unchange event? If that's the case what to fire?
       //Only null value or mininum date with time
       if (inputValue !== undefined && inputValue === '' && this.state.selectedDate !== undefined) {
         this.setState({
