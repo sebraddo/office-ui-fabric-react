@@ -958,7 +958,7 @@ export class ContextualMenu extends BaseComponent<IContextualMenuProps, IContext
         this._targetWindow = getWindow()!;
         this._target = target;
       } else {
-        const targetElement: Element = target as Element;
+        const targetElement: HTMLElement = target as HTMLElement;
         this._targetWindow = getWindow(targetElement)!;
         this._target = target;
       }

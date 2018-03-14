@@ -14,7 +14,7 @@ import {
 import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
 import { Callout } from '../../Callout';
 import { DirectionalHint } from '../../common/DirectionalHint';
-import { TextField } from '../../TextField';
+import { TextField, ITextField } from '../../TextField';
 import { ComboBox, IComboBoxProps, IComboBoxOption, } from '../ComboBox';
 import { Label } from '../../Label';
 import {
@@ -234,6 +234,10 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
     return updatedDate;
   }
+
+  // private _renderTimePicker() {
+
+  // }
 
   public render() {
     const {

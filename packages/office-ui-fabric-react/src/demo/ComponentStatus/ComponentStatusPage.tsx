@@ -8,7 +8,7 @@ import './ComponentStatusPage.scss';
 
 export class ComponentStatusPage extends React.Component<{}, {}> {
   public render() {
-    const sections: IComponentPageSection[] = [{ title: 'Badges', section: this._renderStatusesInfo() }, { title: 'Status', section: this._renderComponents() }];
+    const sections: [IComponentPageSection] = [{ title: 'Badges', section: this._renderStatusesInfo() }, { title: 'Status', section: this._renderComponents() }];
 
     return (
       <ComponentPage

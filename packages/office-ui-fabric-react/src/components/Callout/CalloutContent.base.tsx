@@ -393,8 +393,8 @@ export class CalloutContentBase extends BaseComponent<ICalloutProps, ICalloutSta
       } else if ((target as MouseEvent).stopPropagation) {
         this._targetWindow = getWindow((target as MouseEvent).toElement as HTMLElement)!;
         this._target = target;
-      } else if ((target as Element).getBoundingClientRect) {
-        const targetElement: Element = target as Element;
+      } else if ((target as HTMLElement).getBoundingClientRect) {
+        const targetElement: HTMLElement = target as HTMLElement;
         this._targetWindow = getWindow(targetElement)!;
         this._target = target;
         // HTMLImgElements can have x and y values. The check for it being a point must go last.
