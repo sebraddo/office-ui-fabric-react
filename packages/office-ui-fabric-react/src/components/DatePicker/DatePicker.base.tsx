@@ -361,6 +361,15 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     }
   }
 
+  public setSelectedDateTime(selectedDate: Date | undefined | null) {
+
+    const { setSelectedDateTime } = this.props;
+    // Prop callback
+    if (setSelectedDateTime) {
+      setSelectedDateTime(selectedDate);
+    }
+  }
+
   @autobind
   private _onSelectDate(date: Date) {
     const { formatDate, onSelectDate } = this.props;
@@ -447,10 +456,9 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
         this.setSelectedDateTime(modifiedTime);
       }
-    }
-    //For most scenarios only showing time picker indicates there's a default date implying somewhere in the system
-    // So we are allowing user to provide the default date themselves
-    else {
+    } else {
+      // For most scenarios only showing time picker indicates there's a default date implying somewhere in the system
+      // So we are allowing user to provide the default date themselves
       if (isTimeChanged) {
         const defaultDate = this.props.defaultDate ? this.props.defaultDate : new Date();
         const modifiedTime = this.calculatingTime(newValue!, defaultDate);
@@ -471,7 +479,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     const indexOfSeprator = time.indexOf(':');
     let hour = Number(time.substring(0, indexOfSeprator)), minute = Number(time.substring(indexOfSeprator + 1, indexOfSeprator + 3));
 
-    //Invalid input return default value
+    // Invalid input return default value
     hour = (hour) ? hour : 0;
     minute = (minute) ? minute : 0;
 
@@ -483,15 +491,6 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
       hour,
       minute
     };
-  }
-
-  public setSelectedDateTime(selectedDate: Date | undefined | null) {
-
-    const { setSelectedDateTime } = this.props;
-    // Prop callback
-    if (setSelectedDateTime) {
-      setSelectedDateTime(selectedDate);
-    }
   }
 
   @autobind
@@ -600,9 +599,9 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     if (allowTextInput) {
       let date = null;
 
-      //When user deletes calendar value
-      //We should still set the proper state but no formatting needed
-      //Only null value or mininum date with time
+      // When user deletes calendar value
+      // We should still set the proper state but no formatting needed
+      // Only null value or mininum date with time
       if (inputValue !== undefined && inputValue === '' && this.state.selectedDate !== undefined) {
         this.setState({
           selectedDate: undefined
@@ -610,7 +609,6 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
         return;
       }
-
 
       if (inputValue) {
         // Don't parse if the selected date has the same formatted string as what we're about to parse.
