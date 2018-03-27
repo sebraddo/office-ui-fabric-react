@@ -275,7 +275,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
         ) }
         <div className={ classNames.dateContainer } >
           { displayDatePickerFormat !== DatePickerFormat.timeOnly &&
-            <div ref={ this._resolveRef('_datePickerDiv') }>
+            <div className={ classNames.dateContainerChildDiv } ref={ this._resolveRef('_datePickerDiv') }>
               <TextField
                 className={ classNames.dateTextField }
                 ariaLabel={ ariaLabel }

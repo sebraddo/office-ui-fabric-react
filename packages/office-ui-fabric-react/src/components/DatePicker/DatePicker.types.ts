@@ -317,6 +317,11 @@ export interface IDatePickerStyles {
   dateContainer?: IStyle;
 
   /**
+   * Base styles for the date container
+   */
+  dateContainerChildDiv?: IStyle;
+
+  /**
    * Base styles for the date text field
    */
   dateTextField?: IStyle;
