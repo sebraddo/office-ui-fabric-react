@@ -731,6 +731,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
   @autobind
   private _select() {
     this._comboBox.inputElement.select();
+    this.focus(true);
 
     if (!this.state.focused) {
       this.setState({ focused: true });
