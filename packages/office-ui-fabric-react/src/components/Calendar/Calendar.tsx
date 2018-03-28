@@ -274,6 +274,7 @@ export class Calendar extends BaseComponent<ICalendarProps, ICalendarState> impl
       if (this.props.onDismiss) {
         ev.stopPropagation();
         ev.preventDefault();
+        window.alert('calendar go to today keydown');
         this.props.onDismiss();
       }
     }
@@ -302,6 +303,7 @@ export class Calendar extends BaseComponent<ICalendarProps, ICalendarState> impl
   @autobind
   private _handleEscKey(ev: React.KeyboardEvent<HTMLElement>) {
     if (this.props.onDismiss) {
+      window.alert('popup esc keydown');
       this.props.onDismiss();
     }
   }
