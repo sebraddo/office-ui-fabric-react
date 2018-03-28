@@ -181,14 +181,19 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   timeComboboxStyles?: Partial<IComboBoxStyles>;
 
   /**
-   * Prop to indicate whether you want to display datepicker, timepicker or both date and time picker
-   */
-  displayDatePickerFormat?: DatePickerFormat;
+  * onChange event for time combobox
+  */
+  onChangeTimeCombobox?: (index?: number, value?: string) => void;
 
   /**
    * Collection of options for this ComboBox
    */
   timeOptions?: IComboBoxOption[];
+
+  /**
+   * Default display and selected key of time options
+   */
+  defaultSetTimeValue?: string;
 
   /**
    * Default display and selected key of time options
@@ -201,6 +206,11 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
    * Output hour as number and minute as number
    */
   customizeTimeConverter?: (time: string) => { hour: number, minute: number };
+
+  /**
+   * Prop to indicate whether you want to display datepicker, timepicker or both date and time picker
+   */
+  displayDatePickerFormat?: DatePickerFormat;
 
   /**
   * Call to provide customized styling that will layer on top of the variant rules.
@@ -222,6 +232,22 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   * For time picker scenario, a default date is provided to return a proper date object
   */
   defaultDate?: Date;
+
+  /**
+  * For time picker scenario, a default date is provided to return a proper date object
+  */
+  byPassValidation?: boolean;
+
+  /**
+  * Formatter of date was done in different module, this is the output of the date formatter
+  */
+  displayFormattedDate?: string;
+
+  /**
+  * Compliment with showing displayFormattedDate, since we are bypassing the formatter pipeline here
+  * consumer needs to supply the rawDate
+  */
+  rawDate?: Date;
 }
 
 export enum DatePickerFormat {
