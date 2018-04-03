@@ -153,6 +153,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
     this._isScrollIdle = true;
 
     const index: number = this._getSelectedIndex(props.options, selectedKey);
+    const { value } = this.props;
 
     this.state = {
       isOpen: false,
@@ -177,8 +178,8 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
     if (newProps.selectedKey !== this.props.selectedKey ||
       newProps.value !== this.props.value ||
       newProps.options !== this.props.options) {
-
-      const index: number = this._getSelectedIndex(newProps.options, newProps.selectedKey);
+      const selectedKey = (newProps.selectedKey === 'undefined') ? newProps.defaultSelectedKey : newProps.selectedKey;
+      const index: number = this._getSelectedIndex(newProps.options, selectedKey);
 
       this.setState({
         selectedIndex: index,
@@ -814,7 +815,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
 
     // If we allow freeform and we have a pending value, we
     // need to handle that
-    if (allowFreeform && currentPendingValue !== undefined) {
+    if (allowFreeform && currentPendingValue !== '') {
 
       // Check to see if the user typed an exact match
       if (this._indexWithinBounds(currentOptions, currentPendingValueValidIndex)) {
