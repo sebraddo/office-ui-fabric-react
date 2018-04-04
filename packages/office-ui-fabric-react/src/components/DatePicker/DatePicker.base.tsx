@@ -242,15 +242,6 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     return true;
   }
 
-  public setSelectedDateTime(selectedDate: Date | undefined | null) {
-
-    const { setSelectedDateTime } = this.props;
-    // Prop callback
-    if (setSelectedDateTime) {
-      setSelectedDateTime(selectedDate);
-    }
-  }
-
   public calculatingTime(newtime: string, newDate?: Date) {
     const time = this._parseHourAndTime(newtime);
     time.hour = (time.hour) ? time.hour : 0;
@@ -295,7 +286,8 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
       displayDatePickerFormat,
       timeComboboxStyles,
       defaultSetTimeValue,
-      getStyles
+      getStyles,
+      ariaRequired,
     } = this.props;
     const timeOptions = (this.props.timeOptions) ? this.props.timeOptions : defaultTimeOptions;
     const { isDatePickerShown, formattedDate, selectedDate, errorMessage } = this.state;
@@ -340,14 +332,16 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
                 value={ formattedDate }
                 componentRef={ this._resolveRef('_textField') }
                 role={ allowTextInput ? 'combobox' : 'menu' }
+                ariaRequired={ ariaRequired }
               />
             </div> }
           { displayDatePickerFormat !== DatePickerFormat.dateOnly && <ComboBox
             selectedKey={ `${this.state.selectedIndex}` }
             defaultSelectedKey={ `${this.props.defaultSelectedTimeKey}` }
             disabled={ disabled }
-            id='Basicdrop1'
-            ariaLabel='Basic ComboBox example'
+            id={ 'TimePicker' }
+            ariaLabel={ ariaLabel }
+            ariaRequired={ ariaRequired }
             styles={ timeComboboxCustomizedStyles }
             onChanged={ this._onTextFieldTimeChanged }
             value={ this.state.selectedTime }
@@ -356,6 +350,10 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
             options={ timeOptions }
             useComboBoxAsMenuWidth
             buttonIconProps={ buttonIconProps }
+            overrideCalloutTabIndex={ true }
+            alwaysOpenOnFocus={ true }
+            shouldCalloutReturnFocus={ false }
+            doNotForceRefocus={ true }
           /> }
         </div>
         { isDatePickerShown && (
@@ -371,6 +369,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
             directionalHint={ DirectionalHint.bottomLeftEdge }
             onDismiss={ this._calendarDismissed }
             onPositioned={ this._onCalloutPositioned }
+            overrideTabIndex={ true }
           >
             <Calendar
               { ...calendarProps }
@@ -401,6 +400,14 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   public focus(): void {
     if (this._textField) {
       this._textField.focus();
+    }
+  }
+
+  public setSelectedDateTime(selectedDate: Date | undefined | null) {
+    const { setSelectedDateTime } = this.props;
+    // Prop callback
+    if (setSelectedDateTime) {
+      setSelectedDateTime(selectedDate);
     }
   }
 

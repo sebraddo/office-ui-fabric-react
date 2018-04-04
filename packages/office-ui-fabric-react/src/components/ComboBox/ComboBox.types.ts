@@ -154,6 +154,31 @@ export interface IComboBoxProps extends ISelectableDroppableTextProps<IComboBox>
    * @default true
    */
   isButtonAriaHidden?: boolean;
+
+  /**
+   * Override the tabIndex of -1 that callouts by default have
+   */
+  overrideCalloutTabIndex?: boolean;
+
+  /**
+   * Whether this picker should be considered aria required
+   */
+  ariaRequired?: boolean;
+
+  /**
+   * Open on focus
+   */
+  alwaysOpenOnFocus?: boolean;
+
+  /**
+   * Do not refocus on option selected
+   */
+  doNotForceRefocus?: boolean;
+
+  /**
+   * Should callout return focus
+   */
+  shouldCalloutReturnFocus?: boolean;
 }
 
 export interface IComboBoxStyles {

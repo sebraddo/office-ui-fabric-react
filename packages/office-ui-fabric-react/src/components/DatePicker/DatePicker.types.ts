@@ -53,6 +53,11 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   ariaLabel?: string;
 
   /**
+   * Whether this picker should be considered aria required
+   */
+  ariaRequired?: boolean;
+
+  /**
    * Aria label for date picker popup for screen reader users.
    * @defaultvalue Calendar
    */
@@ -320,6 +325,16 @@ export interface IDatePickerStrings {
    * Aria-label for the "next year" button.
    */
   nextYearAriaLabel?: string;
+
+  /**
+  *
+  */
+  weekNameAriaLabel?: string;
+
+  /**
+   *
+   */
+  daysOfTheWeekAriaLabel?: string;
 }
 
 export interface IDatePickerStyleProps {

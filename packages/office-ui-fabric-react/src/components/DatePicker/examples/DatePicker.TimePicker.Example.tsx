@@ -55,6 +55,8 @@ const DayPickerStrings: IDatePickerStrings = {
   goToToday: 'Go to today',
   prevMonthAriaLabel: 'Go to previous month',
   nextMonthAriaLabel: 'Go to next month',
+  weekNameAriaLabel: 'Week',
+  daysOfTheWeekAriaLabel: 'Days of the week',
 };
 
 export interface IDatePickerTimePickerExampleState {

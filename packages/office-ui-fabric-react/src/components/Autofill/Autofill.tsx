@@ -121,6 +121,7 @@ export class Autofill extends BaseComponent<IAutofillProps, IAutofillState> impl
         value={ displayValue }
         autoCapitalize={ 'off' }
         autoComplete={ 'off' }
+        aria-required={ this.props.ariaRequired }
         onCompositionStart={ this._onCompositionStart }
         onCompositionEnd={ this._onCompositionEnd }
         onChange={ this._onChanged }
