@@ -544,8 +544,10 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     hour = (hour) ? hour : 0;
     minute = (minute) ? minute : 0;
 
-    if ((hour === 12 && time.indexOf('AM') > -1) || (hour !== 12 && time.indexOf('PM') > -1)) {
+    if (hour !== 12 && time.indexOf('PM') > -1) {
       hour = hour + 12;
+    } else if (hour === 12 && time.indexOf('AM') > -1) {
+      hour = hour - 12;
     }
 
     return {

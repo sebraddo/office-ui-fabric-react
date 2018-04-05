@@ -401,7 +401,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
         this._internalFocusShot = true;
       }
       this._comboBox.focus();
-      if (shouldOpenOnFocus || (!this.state.isOpen && !this._itemWasClicked && this.props.alwaysOpenOnFocus)) {
+      if (shouldOpenOnFocus || (!this.state.isOpen && !this.props.disabled && !this._itemWasClicked && this.props.alwaysOpenOnFocus)) {
         this.setState({
           isOpen: true
         });
@@ -742,6 +742,9 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
 
   @autobind
   private _selectViaFocus() {
+    if (this.props.disabled) {
+      return;
+    }
     this._autofillWasFocued = true;
     this._select();
     this._internalFocusShot = false;
@@ -1625,7 +1628,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
   @autobind
   private _onAutofillClick() {
     if (this.props.allowFreeform) {
-      if (this.state.focused && !this._autofillWasFocued) {
+      if (this.state.focused && !this._autofillWasFocued && !this.props.disabled) {
         this._itemWasClicked = true;
         this.setState({
           isOpen: !this.state.isOpen
