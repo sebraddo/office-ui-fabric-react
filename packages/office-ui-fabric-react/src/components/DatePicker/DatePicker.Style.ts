@@ -19,9 +19,13 @@ export function getStyles(props: IDatePickerStyleProps): IDatePickerStyles {
       className],
     dateTextField: [
       'ms-DatePicker-TextField',
-      disabled && {
-        pointerEvents: 'initials',
-        cursor: 'pointer'
+      !disabled && {
+        selectors: {
+          'input:hover': {
+            pointerEvents: 'initial',
+            cursor: 'pointer'
+          }
+        }
       }],
     iconStyle: [
       'icon-style',
@@ -34,7 +38,7 @@ export function getStyles(props: IDatePickerStyleProps): IDatePickerStyles {
         top: label ? 'unset' : '7px',
         right: '9px'
       },
-      disabled && {
+      !disabled && {
         pointerEvents: 'initial',
         cursor: 'pointer'
       }
@@ -64,7 +68,7 @@ export function getDateAndTimePickerStyle(props: IDatePickerStyleProps): IDatePi
     },
     dateTextField: [
       'ms-DatePicker-TextField',
-      {
+      !disabled && {
         border: '1px solid transparent',
         selectors: {
           ':hover': {
@@ -88,9 +92,12 @@ export function getDateAndTimePickerStyle(props: IDatePickerStyleProps): IDatePi
         position: 'absolute',
         bottom: label ? '5px' : 'unset',
         top: label ? 'unset' : '7px',
-        right: '9px'
+        right: '9px',
+        marginRight: '-25px',
+        width: '40px',
+        paddingLeft: '20px'
       },
-      disabled && {
+      !disabled && {
         pointerEvents: 'initial',
         cursor: 'pointer'
       }
