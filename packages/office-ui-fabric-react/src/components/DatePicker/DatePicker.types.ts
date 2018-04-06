@@ -253,12 +253,17 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   * consumer needs to supply the rawDate
   */
   rawDate?: Date;
+
+  /**
+   * Default time value
+   */
+  defaultInitialTimeValue?: string;
 }
 
 export enum DatePickerFormat {
   dateOnly = 0,
   timeOnly = 1,
-  bothDateAndDate = 2,
+  bothDateAndTime = 2,
 }
 
 export interface IDatePickerStrings {

@@ -179,6 +179,11 @@ export interface IComboBoxProps extends ISelectableDroppableTextProps<IComboBox>
    * Should callout return focus
    */
   shouldCalloutReturnFocus?: boolean;
+
+  /**
+   * signifies whether freeform inputs will be added to the list of options or not
+   */
+  freeformWillNotBeAdded?: boolean;
 }
 
 export interface IComboBoxStyles {

@@ -708,7 +708,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
    * @param searchDirection - the direction to search along the options from the given index
    */
   private _setSelectedIndex(index: number, searchDirection: SearchDirection = SearchDirection.none) {
-    const { onChanged } = this.props;
+    const { onChanged, allowFreeform } = this.props;
     const { selectedIndex, currentOptions } = this.state;
 
     // Find the next selectable index, if searchDirection is none
@@ -837,7 +837,8 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
     const {
       onChanged,
       allowFreeform,
-      autoComplete
+      autoComplete,
+      freeformWillNotBeAdded
     } = this.props;
     const {
       currentPendingValue,
@@ -871,6 +872,11 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
       }
 
       if (onChanged) {
+        if (freeformWillNotBeAdded) {
+          this.setState({
+            selectedIndex: -1
+          });
+        }
         onChanged(undefined, undefined, currentPendingValue);
       } else {
         // If we are not controlled, create a new option

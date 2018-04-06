@@ -244,6 +244,10 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
   public calculatingTime(newtime: string, newDate?: Date) {
     const time = this._parseHourAndTime(newtime);
+    if (time.hour < 0 || time.minute < 0) {
+      return this.state.selectedDate;
+    }
+
     time.hour = (time.hour) ? time.hour : 0;
     time.minute = (time.minute) ? time.minute : 0;
 
@@ -354,6 +358,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
             alwaysOpenOnFocus={ true }
             shouldCalloutReturnFocus={ false }
             doNotForceRefocus={ true }
+            freeformWillNotBeAdded={ true }
           /> }
         </div>
         { isDatePickerShown && (
@@ -490,27 +495,22 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
       onChangeTimeCombobox(index, value);
     }
 
-    const newValue = (value !== undefined) ? value : (option ? option.text : undefined);
+    let newValue = (value !== undefined) ? value : (option ? option.text : undefined);
     const isTimeChanged = newValue !== this.state.selectedTime && newValue !== undefined;
-
-    if (this.props.displayDatePickerFormat === DatePickerFormat.bothDateAndDate) {
-      // If user didn't pick a date yet, it's not an valid output
-      if (!this.state.selectedDate) {
-        this.setState({
-          selectedTime: newValue,
-          selectedIndex: index || this.state.selectedIndex
-        });
-        return;
-      }
-
+    const parsedTime = this._parseHourAndTime(newValue!);
+    if (parsedTime.hour < 0 || parsedTime.minute < 0) {
+      newValue = this.state.selectedTime === this.props.defaultInitialTimeValue ? '' : this.state.selectedTime;
+    }
+    if (this.props.displayDatePickerFormat === DatePickerFormat.bothDateAndTime) {
+      const useDate = this.state.selectedDate || this.props.defaultDate || new Date();
       if (isTimeChanged) {
-        const modifiedTime = this.calculatingTime(newValue!);
+        const modifiedTime = this.calculatingTime(newValue!, useDate);
 
         if (modifiedTime) {
           this.setState({
             selectedTime: newValue,
             selectedDate: modifiedTime,
-            selectedIndex: index || this.state.selectedIndex
+            selectedIndex: index || -1,
           });
 
           this.setSelectedDateTime(modifiedTime);
@@ -521,11 +521,12 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
         // For most scenarios only showing time picker indicates there's a default date implying somewhere in the system
         // So we are allowing user to provide the default date themselves
         const defaultDate = this.props.defaultDate ? this.props.defaultDate : new Date();
+
         const modifiedTime = this.calculatingTime(newValue!, defaultDate);
 
         this.setState({
           selectedTime: newValue,
-          selectedIndex: index || this.state.selectedIndex
+          selectedIndex: index || -1
         });
 
         this.setSelectedDateTime(modifiedTime);
@@ -537,12 +538,24 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   // Structured data model wouln't work, so we have to parse out the hour and time
   // By default our time is xx:xx
   private _parseHourAndTime(time: string) {
+    if (time === this.props.defaultInitialTimeValue) {
+      return {
+        hour: 0,
+        minute: 0,
+      };
+    }
     const indexOfSeprator = time.indexOf(':');
+    if (indexOfSeprator < 0) {
+      return {
+        hour: -1,
+        minute: -1
+      };
+    }
     let hour = Number(time.substring(0, indexOfSeprator)), minute = Number(time.substring(indexOfSeprator + 1, indexOfSeprator + 3));
 
     // Invalid input return default value
-    hour = (hour) ? hour : 0;
-    minute = (minute) ? minute : 0;
+    hour = (!Number.isNaN(hour)) ? hour : -1;
+    minute = (!Number.isNaN(minute)) ? minute : -1;
 
     if (hour !== 12 && time.indexOf('PM') > -1) {
       hour = hour + 12;

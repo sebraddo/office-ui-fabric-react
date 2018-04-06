@@ -77,7 +77,7 @@ export class DatePickerTimePickerExample extends React.Component<{}, IDatePicker
 
     return (
       <div>
-        <DatePicker disableAutoFocus setSelectedDateTime={ this._timeChangeCallback } displayDatePickerFormat={ DatePickerFormat.bothDateAndDate } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
+        <DatePicker disableAutoFocus setSelectedDateTime={ this._timeChangeCallback } displayDatePickerFormat={ DatePickerFormat.bothDateAndTime } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
       </div>
     );
   }
