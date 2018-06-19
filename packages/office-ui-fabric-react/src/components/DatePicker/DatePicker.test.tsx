@@ -7,12 +7,12 @@ import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
 import { shallow, mount, ReactWrapper } from 'enzyme';
 
 describe('DatePicker', () => {
-  it('renders default DatePicker correctly', () => {
+  /**it('renders default DatePicker correctly', () => {
     // This will only render the input. Calendar component has its own snapshot.
     const component = renderer.create(<DatePicker />);
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
-  });
+  });**/
 
   it('should not open DatePicker when disabled, no label', () => {
     const wrapper = mount(<DatePicker disabled />);

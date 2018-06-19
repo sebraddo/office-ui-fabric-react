@@ -93,6 +93,11 @@ export interface IAutofillProps extends
    * A callback used to modify the input string.
    */
   onInputChange?: (value: string) => string;
+
+  /**
+   * Whether this picker should be considered aria required
+   */
+  ariaRequired?: boolean;
 }
 
 /**
