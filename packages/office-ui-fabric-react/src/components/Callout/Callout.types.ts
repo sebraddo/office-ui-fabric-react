@@ -204,6 +204,16 @@ export interface ICalloutProps {
   * Optional styles for the component.
   */
   getStyles?: IStyleFunction<ICalloutContentStyleProps, ICalloutContentStyles>;
+
+  /**
+   * Overrides the -1 tab index necessary for some surfaces
+   */
+  overrideTabIndex?: boolean;
+
+  /**
+   *  Should restoreFocus
+   */
+  shouldRestoreFocus?: boolean;
 }
 
 export interface ICalloutContentStyleProps {

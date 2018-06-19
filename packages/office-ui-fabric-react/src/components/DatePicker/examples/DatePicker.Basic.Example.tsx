@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { autobind } from '../../../Utilities';
 import { Dropdown, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { DatePicker, DayOfWeek, IDatePickerStrings } from 'office-ui-fabric-react/lib/DatePicker';
+import { DatePicker, DayOfWeek, IDatePickerStrings, DatePickerFormat } from 'office-ui-fabric-react/lib/DatePicker';
 
 const DayPickerStrings: IDatePickerStrings = {
   months: [
@@ -79,14 +79,7 @@ export class DatePickerBasicExample extends React.Component<{}, IDatePickerBasic
 
     return (
       <div>
-        <DatePicker
-          firstDayOfWeek={ firstDayOfWeek }
-          strings={ DayPickerStrings }
-          placeholder='Select a date...'
-          // tslint:disable:jsx-no-lambda
-          onAfterMenuDismiss={ () => console.log('onAfterMenuDismiss called') }
-        // tslint:enable:jsx-no-lambda
-        />
+        <DatePicker disabled displayDatePickerFormat={ DatePickerFormat.dateOnly } setSelectedDateTime={ this._timeChangeCallback } firstDayOfWeek={ firstDayOfWeek } onAfterMenuDismiss={ this._onAfterMenuDismissLog } allowTextInput strings={ DayPickerStrings } showGoToToday isMonthPickerVisible placeholder='Select a date...' />
         <Dropdown
           label='Select the first day of the week'
           options={ [
@@ -124,6 +117,14 @@ export class DatePickerBasicExample extends React.Component<{}, IDatePickerBasic
         />
       </div>
     );
+  }
+
+  private _timeChangeCallback(date: Date) {
+    console.log(date);
+  }
+
+  private _onAfterMenuDismissLog() {
+    console.log('onAfterMenuDismiss called');
   }
 
   @autobind

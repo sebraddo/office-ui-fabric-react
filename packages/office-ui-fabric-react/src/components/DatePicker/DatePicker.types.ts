@@ -1,15 +1,19 @@
 import * as React from 'react';
-import { DatePicker } from './DatePicker';
+import { DatePickerBase } from './DatePicker.base';
 import { DayOfWeek, ICalendarProps } from '../../Calendar';
 import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
 import { ICalendarFormatDateCallbacks } from '../Calendar/Calendar.types';
+import { IStyle, ITheme } from '../../Styling';
+import { IStyleFunction } from '../../Utilities';
+import { IComboBoxStyles, IComboBoxOption } from '../ComboBox/ComboBox.types';
+import { IWithResponsiveModeState, ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
 
 export interface IDatePicker {
   /** Sets focus to the text field */
   focus(): void;
 }
 
-export interface IDatePickerProps extends React.Props<DatePicker> {
+export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResponsiveModeState {
   /**
    * Optional callback to access the IDatePicker interface. Use this instead of ref for accessing
    * the public methods and properties of the component.
@@ -47,6 +51,11 @@ export interface IDatePickerProps extends React.Props<DatePicker> {
    * Aria Label for TextField of the DatePicker for screen reader users.
    */
   ariaLabel?: string;
+
+  /**
+   * Whether this picker should be considered aria required
+   */
+  ariaRequired?: boolean;
 
   /**
    * Aria label for date picker popup for screen reader users.
@@ -172,9 +181,89 @@ export interface IDatePickerProps extends React.Props<DatePicker> {
   initialPickerDate?: Date;
 
   /**
- * Callback that runs after DatePicker's menu (Calendar) is closed
- */
+   * This is to be removed after combobox refactoring to take getStyle functional style
+   */
+  timeComboboxStyles?: Partial<IComboBoxStyles>;
+
+  /**
+  * onChange event for time combobox
+  */
+  onChangeTimeCombobox?: (index?: number, value?: string) => void;
+
+  /**
+   * Collection of options for this ComboBox
+   */
+  timeOptions?: IComboBoxOption[];
+
+  /**
+   * Default display and selected key of time options
+   */
+  defaultSetTimeValue?: string;
+
+  /**
+   * Default display and selected key of time options
+   */
+  defaultSelectedTimeKey?: number;
+
+  /**
+   * If you supply your own timeOptions, please provide a corresponding converter
+   * Input time as a string return from combobox
+   * Output hour as number and minute as number
+   */
+  customizeTimeConverter?: (time: string) => { hour: number, minute: number };
+
+  /**
+   * Prop to indicate whether you want to display datepicker, timepicker or both date and time picker
+   */
+  displayDatePickerFormat?: DatePickerFormat;
+
+  /**
+  * Call to provide customized styling that will layer on top of the variant rules.
+  */
+  getStyles?: IStyleFunction<IDatePickerStyleProps, IDatePickerStyles>;
+
+  /**
+  * Callback that returns you the modified date time as a date type object
+  * Need to verify the format
+  */
+  setSelectedDateTime?: (selectedDate: Date | null | undefined) => void;
+
+  /**
+  * Callback that runs after DatePicker's menu (Calendar) is closed
+  */
   onAfterMenuDismiss?: () => void;
+
+  /**
+  * For time picker scenario, a default date is provided to return a proper date object
+  */
+  defaultDate?: Date;
+
+  /**
+  * For time picker scenario, a default date is provided to return a proper date object
+  */
+  byPassValidation?: boolean;
+
+  /**
+  * Formatter of date was done in different module, this is the output of the date formatter
+  */
+  displayFormattedDate?: string;
+
+  /**
+  * Compliment with showing displayFormattedDate, since we are bypassing the formatter pipeline here
+  * consumer needs to supply the rawDate
+  */
+  rawDate?: Date;
+
+  /**
+   * Default time value
+   */
+  defaultInitialTimeValue?: string;
+}
+
+export enum DatePickerFormat {
+  dateOnly = 0,
+  timeOnly = 1,
+  bothDateAndTime = 2,
 }
 
 export interface IDatePickerStrings {
@@ -241,4 +330,70 @@ export interface IDatePickerStrings {
    * Aria-label for the "next year" button.
    */
   nextYearAriaLabel?: string;
+
+  /**
+  *
+  */
+  weekNameAriaLabel?: string;
+
+  /**
+   *
+   */
+  daysOfTheWeekAriaLabel?: string;
+}
+
+export interface IDatePickerStyleProps {
+  displayDatePickerFormat?: DatePickerFormat;
+  responsiveMode?: ResponsiveMode;
+  className?: string;
+  disabled?: boolean;
+  label?: string;
+}
+
+export interface IDatePickerStyles {
+
+  /**
+   * Base styles for the root element of datepicker
+   */
+  root?: IStyle;
+
+  /**
+   * Base styles for the date container
+   */
+  dateContainer?: IStyle;
+
+  /**
+   * Base styles for the date container
+   */
+  dateContainerChildDiv?: IStyle;
+
+  /**
+   * Base styles for the date text field
+   */
+  dateTextField?: IStyle;
+
+  /**
+   * Base styles for the call out that wraps the calendar
+   */
+  dateCallout?: IStyle;
+
+  /**
+   * Base styles for the actually Calendar
+   */
+  dateCalendar?: IStyle;
+
+  /**
+   * Base styles for the time picker text field
+   */
+  timepickerTextField?: IStyle;
+
+  /**
+   * the icon renders in the date picker text field
+   */
+  iconStyle?: IStyle;
+
+  /**
+   * Base styles for Icon renders in the time picker combobox
+   */
+  timePickerIconStyle?: IStyle;
 }

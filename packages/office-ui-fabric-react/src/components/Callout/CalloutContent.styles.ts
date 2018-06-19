@@ -51,7 +51,7 @@ export const getStyles = (props: ICalloutContentStyleProps): ICalloutContentStyl
       'ms-Callout',
       {
         position: 'absolute',
-        boxSizing: 'border-box',
+        boxSizing: 'content-box',
         borderWidth: 1,
         borderStyle: 'solid',
         borderColor: palette.neutralLight,
