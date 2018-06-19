@@ -196,6 +196,15 @@ export interface ICalendarStrings {
    */
   nextYearAriaLabel?: string;
 
+  /**
+   *
+   */
+  weekNameAriaLabel?: string;
+
+  /**
+   *
+   */
+  daysOfTheWeekAriaLabel?: string;
 }
 
 export interface ICalendarIconStrings {

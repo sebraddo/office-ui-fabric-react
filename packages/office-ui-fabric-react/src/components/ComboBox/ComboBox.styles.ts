@@ -24,15 +24,18 @@ const getDisabledStyles = memoizeFunction((theme: ITheme): IRawStyle => {
   const { semanticColors } = theme;
 
   return {
-    backgroundColor: semanticColors.disabledBackground,
-    borderColor: semanticColors.disabledBackground,
-    color: semanticColors.disabledText,
+    backgroundColor: 'transparent', // semanticColors.disabledBackground,
+    // borderColor: semanticColors.disabledBackground,
+    color: 'rgb(51, 51, 51)',// semanticColors.disabledText,
     cursor: 'default',
     selectors: {
       [HighContrastSelector]: {
         borderColor: 'GrayText',
         color: 'GrayText'
-      }
+      },
+      ':hover': {
+        backgroundColor: 'rgb(226, 226, 226)',
+      },
     },
   };
 });
