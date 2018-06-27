@@ -129,6 +129,15 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
 
   private _scrollIdleTimeoutId: number | undefined;
 
+  private _itemWasClicked = false;
+
+  private _internalFocusShot = false;
+
+  /**
+   * Autofill was focused, ignore the click
+   */
+  private _autofillWasFocued = false;
+
   // Determines if we should be setting
   // focus back to the input when the menu closes.
   // The general rule of thumb is if the menu was launched
@@ -213,13 +222,14 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
 
     // If we are open or we are just closed, shouldFocusAfterClose is set,
     // are focused but we are not the activeElement set focus on the input
-    if (isOpen ||
+    if ((isOpen && !this.props.doNotForceRefocus) ||
       (prevState.isOpen &&
         !isOpen &&
-        this._focusInputAfterClose &&
+        (this._focusInputAfterClose || this._itemWasClicked) &&
         focused &&
         document.activeElement !== this._comboBox.inputElement)) {
       this.focus();
+      this._itemWasClicked = false;
     }
 
     // If we should focusAfterClose AND
@@ -273,7 +283,8 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
       isButtonAriaHidden = true,
       styles: customStyles,
       theme,
-      title
+      title,
+      ariaRequired
     } = this.props;
     const { isOpen, selectedIndex, focused, suggestedDisplayValue } = this.state;
     this._currentVisibleValue = this._getVisibleValue();
@@ -319,7 +330,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
             id={ id + '-input' }
             className={ this._classNames.input }
             type='text'
-            onFocus={ this._select }
+            onFocus={ this._selectViaFocus }
             onBlur={ this._onBlur }
             onKeyDown={ this._onInputKeyDown }
             onKeyUp={ this._onInputKeyUp }
@@ -327,6 +338,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
             onInputValueChange={ this._onInputChange }
             aria-expanded={ isOpen }
             aria-autocomplete={ this._getAriaAutoCompleteValue() }
+            ariaRequired={ ariaRequired || required }
             role='combobox'
             aria-readonly={ ((allowFreeform || disabled) ? null : 'true') }
             readOnly={ disabled || !allowFreeform }
@@ -385,8 +397,11 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
   @autobind
   public focus(shouldOpenOnFocus?: boolean) {
     if (this._comboBox) {
+      if (this._itemWasClicked) {
+        this._internalFocusShot = true;
+      }
       this._comboBox.focus();
-      if (shouldOpenOnFocus) {
+      if (shouldOpenOnFocus || (!this.state.isOpen && !this.props.disabled && !this._itemWasClicked && this.props.alwaysOpenOnFocus)) {
         this.setState({
           isOpen: true
         });
@@ -693,7 +708,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
    * @param searchDirection - the direction to search along the options from the given index
    */
   private _setSelectedIndex(index: number, searchDirection: SearchDirection = SearchDirection.none) {
-    const { onChanged } = this.props;
+    const { onChanged, allowFreeform } = this.props;
     const { selectedIndex, currentOptions } = this.state;
 
     // Find the next selectable index, if searchDirection is none
@@ -725,6 +740,16 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
     }
   }
 
+  @autobind
+  private _selectViaFocus() {
+    if (this.props.disabled) {
+      return;
+    }
+    this._autofillWasFocued = true;
+    this._select();
+    this._internalFocusShot = false;
+  }
+
   /**
    * Focus (and select) the content of the input
    * and set the focused state
@@ -732,10 +757,19 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
   @autobind
   private _select() {
     this._comboBox.inputElement.select();
-
+    let newState = undefined;
     if (!this.state.focused) {
-      this.setState({ focused: true });
+      newState = Object.assign({}, { focused: true });
     }
+
+    if (!this.state.isOpen && this.props.alwaysOpenOnFocus && !this._internalFocusShot) {
+      newState = Object.assign({}, newState, { isOpen: true });
+    }
+
+    if (newState) {
+      this.setState(newState);
+    }
+
   }
 
   /**
@@ -803,7 +837,8 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
     const {
       onChanged,
       allowFreeform,
-      autoComplete
+      autoComplete,
+      freeformWillNotBeAdded
     } = this.props;
     const {
       currentPendingValue,
@@ -837,6 +872,11 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
       }
 
       if (onChanged) {
+        if (freeformWillNotBeAdded) {
+          this.setState({
+            selectedIndex: -1
+          });
+        }
         onChanged(undefined, undefined, currentPendingValue);
       } else {
         // If we are not controlled, create a new option
@@ -869,7 +909,9 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
       calloutProps,
       dropdownWidth,
       onRenderLowerContent = this._onRenderLowerContent,
-      useComboBoxAsMenuWidth
+      useComboBoxAsMenuWidth,
+      overrideCalloutTabIndex,
+      shouldCalloutReturnFocus
     } = props;
 
     return (
@@ -889,6 +931,9 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
           useComboBoxAsMenuWidth ?
             this._comboBoxWrapper.clientWidth
             : dropdownWidth }
+        overrideTabIndex={ overrideCalloutTabIndex }
+        shouldRestoreFocus={ shouldCalloutReturnFocus }
+        onLayerMounted={ this._onCalloutRendered }
       >
         <div className={ this._classNames.optionsContainerWrapper } ref={ this._resolveRef('_comboBoxMenu') }>
           { (onRenderList as any)({ ...props }, this._onRenderList) }
@@ -896,6 +941,19 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
         { onRenderLowerContent(this.props, this._onRenderLowerContent) }
       </Callout>
     );
+  }
+
+  @autobind
+  private _onCalloutRendered() {
+    if (this.props.doNotForceRefocus) {
+      const index = (this.state.currentPendingValueValidIndex && this.state.currentPendingValueValidIndex >= 0) ?
+        this.state.currentPendingValueValidIndex :
+        (this.state.selectedIndex && this.state.selectedIndex >= 0 ? this.state.selectedIndex : 0);
+      const focusElement = document.getElementById(this._id + '-list' + index);
+      if (focusElement) {
+        focusElement.focus();
+      }
+    }
   }
 
   // Render List of items
@@ -983,6 +1041,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
         onMouseEnter={ this._onOptionMouseEnter.bind(this, item.index) }
         onMouseMove={ this._onOptionMouseMove.bind(this, item.index) }
         onMouseLeave={ this._onOptionMouseLeave }
+        onKeyDown={ this._onListItemKeyDown(item.index) }
         role='option'
         aria-selected={ isSelected ? 'true' : 'false' }
         ariaLabel={ item.text }
@@ -1113,6 +1172,52 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
   }
 
   /**
+   * Handle keydown on the list items
+   */
+  @autobind
+  private _onListItemKeyDown(idx: number | undefined): (ev: React.KeyboardEvent<HTMLDivElement | HTMLAnchorElement | HTMLButtonElement>) => void {
+    return (ev: React.KeyboardEvent<HTMLDivElement | HTMLAnchorElement | HTMLButtonElement>): void => {
+      const index = idx as number;
+      switch (ev.which) {
+        case KeyCodes.tab:
+          if ((ev.shiftKey && index === 0) || (index + 1 === this.props.options.length)) {
+            this._comboBox.focus();
+          } else {
+            return;
+          }
+          break;
+        case KeyCodes.escape:
+          // reset the selected index
+          this._resetSelectedIndex();
+
+          // Close the menu if opened
+          if (this.state.isOpen) {
+            this.setState({
+              isOpen: false
+            });
+          } else {
+            return;
+          }
+          break;
+        case KeyCodes.enter:
+          this._setPendingInfoFromIndex(index);
+          this._itemWasClicked = true;
+          this._internalFocusShot = true;
+          // Close the menu if opened
+          if (this.state.isOpen) {
+            this.setState({
+              isOpen: false
+            });
+          }
+          return;
+      }
+
+      ev.stopPropagation();
+      ev.preventDefault();
+    };
+  }
+
+  /**
    * Click handler for the menu items
    * to select the item and also close the menu
    * @param index - the index of the item that was clicked
@@ -1120,6 +1225,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
   private _onItemClick(index: number | undefined): () => void {
     return (): void => {
       this._setSelectedIndex(index as number);
+      this._itemWasClicked = true;
       this.setState({
         isOpen: false
       });
@@ -1528,7 +1634,16 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
   @autobind
   private _onAutofillClick() {
     if (this.props.allowFreeform) {
-      this.focus(this.state.isOpen);
+      if (this.state.focused && !this._autofillWasFocued && !this.props.disabled) {
+        this._itemWasClicked = true;
+        this.setState({
+          isOpen: !this.state.isOpen
+        });
+      } else if (this._autofillWasFocued) {
+        this._autofillWasFocued = false;
+      } else {
+        this.focus(this.state.isOpen);
+      }
     } else {
       this._onComboBoxClick();
     }

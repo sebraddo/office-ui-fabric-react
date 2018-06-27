@@ -131,6 +131,7 @@ export class CalendarDay extends BaseComponent<ICalendarDayProps, ICalendarDaySt
           showWeekNumbers && 'ms-DatePicker-showWeekNumbers' && (getRTL() ? styles.showWeekNumbersRTL : styles.showWeekNumbers)
         ) }
         id={ dayPickerId }
+        role={ 'presentation' }
       >
         <div className={ css('ms-DatePicker-monthComponents', styles.monthComponents) }>
           <div className={ css('ms-DatePicker-navContainer', styles.navContainer) }>
@@ -166,7 +167,7 @@ export class CalendarDay extends BaseComponent<ICalendarDayProps, ICalendarDaySt
           </div >
         </div >
         <div className={ css('ms-DatePicker-header', styles.header) } >
-          <div aria-live='polite' aria-relevant='text' aria-atomic='true' id={ monthAndYearId }>
+          <div aria-live='polite' aria-relevant='text' aria-atomic='true' id={ monthAndYearId } role={ 'presentation' }>
             { this.props.onHeaderSelect ?
               <div
                 className={ css('ms-DatePicker-monthAndYear js-showMonthPicker', styles.monthAndYear, styles.headerToggleView) }
@@ -221,7 +222,7 @@ export class CalendarDay extends BaseComponent<ICalendarDayProps, ICalendarDaySt
             aria-activedescendant={ activeDescendantId }
           >
             <thead>
-              <tr>
+              <tr aria-hidden='true'>
                 { strings.shortDays.map((val, index) =>
                   <th
                     className={ css('ms-DatePicker-weekday', styles.weekday) }
@@ -237,7 +238,11 @@ export class CalendarDay extends BaseComponent<ICalendarDayProps, ICalendarDaySt
             </thead>
             <tbody>
               { weeks!.map((week, weekIndex) =>
-                <tr key={ weekIndex } role='row'>
+                <tr
+                  key={ weekIndex }
+                  role='row'
+                  aria-label={ strings.weekNameAriaLabel + ' ' + (weekIndex + 1) }
+                >
                   { week.map((day, dayIndex) => {
                     const isNavigatedDate = compareDates(navigatedDate, day.originalDate);
                     return <td
@@ -248,6 +253,14 @@ export class CalendarDay extends BaseComponent<ICalendarDayProps, ICalendarDaySt
                           ['ms-DatePicker-monthBackground ' + styles.monthBackground + ' ' + this._getHighlightedCornerStyle(weekCorners, dayIndex, weekIndex)]: day.isInMonth && day.isSelected && dateRangeType === DateRangeType.Month,
                           ['ms-DatePicker-dayBackground ' + styles.dayBackground]: day.isSelected && dateRangeType === DateRangeType.Day
                         }) }
+                      onClick={ day.isInBounds ? day.onSelected : undefined }
+                      onKeyDown={ this._onDayKeyDown(day.originalDate, weekIndex, dayIndex) }
+                      aria-selected={ day.isInBounds ? day.isSelected : undefined }
+                      aria-label={ dateTimeFormatter.formatMonthDayYear(day.originalDate, strings) }
+                      id={ isNavigatedDate ? activeDescendantId : undefined }
+                      ref={ isNavigatedDate ? 'navigatedDay' : undefined }
+                      data-is-focusable={ day.isInBounds ? true : undefined }
+                      role={ 'gridcell' }
                     >
                       <div
                         className={ css(
@@ -260,17 +273,12 @@ export class CalendarDay extends BaseComponent<ICalendarDayProps, ICalendarDaySt
                             ['ms-DatePicker-day--today ' + styles.dayIsToday]: day.isToday,
                             ['ms-DatePicker-day--highlighted ' + styles.dayIsHighlighted]: day.isSelected && dateRangeType === DateRangeType.Day
                           }) }
-                        role={ 'gridcell' }
-                        onClick={ day.isInBounds ? day.onSelected : undefined }
-                        onKeyDown={ this._onDayKeyDown(day.originalDate, weekIndex, dayIndex) }
-                        aria-label={ dateTimeFormatter.formatMonthDayYear(day.originalDate, strings) }
-                        id={ isNavigatedDate ? activeDescendantId : undefined }
-                        aria-selected={ day.isInBounds ? day.isSelected : undefined }
-                        data-is-focusable={ day.isInBounds ? true : undefined }
-                        ref={ isNavigatedDate ? 'navigatedDay' : undefined }
-                        key={ isNavigatedDate ? 'navigatedDay' : undefined }
                       >
-                        <span aria-hidden='true'>{ dateTimeFormatter.formatDay(day.originalDate) }</span>
+                        <span
+                          aria-hidden='true'
+                        >
+                          { dateTimeFormatter.formatDay(day.originalDate) }
+                        </span>
                       </div>
                     </td>;
                   }) }

@@ -63,6 +63,9 @@ export function getDateAndTimePickerStyle(props: IDatePickerStyleProps): IDatePi
         minWidth: responsiveMode! <= ResponsiveMode.small ? '9rem' : '18rem',
         flexDirection: responsiveMode! <= ResponsiveMode.small ? 'column' : 'row'
       }],
+    dateContainerChildDiv: {
+      height: '100%',
+    },
     dateTextField: [
       'ms-DatePicker-TextField',
       !disabled && {

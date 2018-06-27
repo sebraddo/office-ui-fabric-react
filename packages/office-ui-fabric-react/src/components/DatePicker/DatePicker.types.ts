@@ -53,6 +53,11 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   ariaLabel?: string;
 
   /**
+   * Whether this picker should be considered aria required
+   */
+  ariaRequired?: boolean;
+
+  /**
    * Aria label for date picker popup for screen reader users.
    * @defaultvalue Calendar
    */
@@ -248,12 +253,17 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   * consumer needs to supply the rawDate
   */
   rawDate?: Date;
+
+  /**
+   * Default time value
+   */
+  defaultInitialTimeValue?: string;
 }
 
 export enum DatePickerFormat {
   dateOnly = 0,
   timeOnly = 1,
-  bothDateAndDate = 2,
+  bothDateAndTime = 2,
 }
 
 export interface IDatePickerStrings {
@@ -320,6 +330,16 @@ export interface IDatePickerStrings {
    * Aria-label for the "next year" button.
    */
   nextYearAriaLabel?: string;
+
+  /**
+  *
+  */
+  weekNameAriaLabel?: string;
+
+  /**
+   *
+   */
+  daysOfTheWeekAriaLabel?: string;
 }
 
 export interface IDatePickerStyleProps {
@@ -341,6 +361,11 @@ export interface IDatePickerStyles {
    * Base styles for the date container
    */
   dateContainer?: IStyle;
+
+  /**
+   * Base styles for the date container
+   */
+  dateContainerChildDiv?: IStyle;
 
   /**
    * Base styles for the date text field

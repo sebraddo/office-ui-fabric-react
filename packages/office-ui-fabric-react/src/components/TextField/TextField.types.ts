@@ -232,4 +232,9 @@ export interface ITextFieldProps extends React.AllHTMLAttributes<HTMLInputElemen
    * This tells the browser to display options based on earlier typed values.
    */
   autoComplete?: 'on' | 'off';
+
+  /**
+   * Whether this picker should be considered aria required
+   */
+  ariaRequired?: boolean;
 }
