@@ -7,3 +7,14 @@ export const DatePicker = styled<IDatePickerProps, IDatePickerStyleProps, IDateP
   DatePickerBase,
   getStyles
 );
+
+// Export 3 different controls for different getStyles(), and getProps()
+// Revert the icon change
+// Hand pointer on date
+// Disabled mode change
+// customizeTimeConverter
+// Enum to boolean
+// All upper case for default time
+
+// OnRender function Component
+// Utility function

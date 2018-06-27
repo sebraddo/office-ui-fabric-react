@@ -188,12 +188,14 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   }
 
   public componentWillReceiveProps(nextProps: IDatePickerProps) {
-    const { formatDate, isRequired, strings, value, minDate, maxDate } = nextProps;
+    const { formatDate, isRequired, strings, value, minDate, maxDate, displayDatePickerFormat } = nextProps;
 
     if (compareDates(this.props.minDate!, nextProps.minDate!) &&
       compareDates(this.props.maxDate!, nextProps.maxDate!) &&
       this.props.isRequired === nextProps.isRequired &&
-      compareDates(this.state.selectedDate!, value!) &&
+      /*Adding the check when compareDates(this.state.selectedDate!, value!), there's scenario when providing formatDate, manually added date will not be updated
+      */
+      (compareDates(this.state.selectedDate!, value!) && !this.state.selectedDate) &&
       this.props.formatDate === formatDate) {
       // if the props we care about haven't changed, don't run validation or updates
       return;
@@ -212,13 +214,12 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
     // Issue# 1274: Check if the date value changed from old value, i.e., if indeed a new date is being
     // passed in or if the formatting function was modified. We only update the selected date if either of these
-    // had a legit change. Note tha the bug will still repro when only the formatDate was passed in props and this
-    // is the result of the onSelectDate callback, but this should be a rare scenario.
+    // had a legit change.
     const oldValue = this.state.selectedDate;
-    if (value !== undefined && !compareDates(oldValue!, value!) || this.props.formatDate !== formatDate) {
+    if (!compareDates(oldValue!, value!) || this.props.formatDate !== formatDate || this.state.selectedDate) {
       this.setState({
         selectedDate: value || undefined,
-        formattedDate: (formatDate && value) ? formatDate(value) : '',
+        formattedDate: (formatDate && (value || oldValue)) ? formatDate(oldValue || value) : '',
       });
     }
   }
@@ -233,6 +234,15 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     updatedDate.setHours(time.hour, time.minute);
 
     return updatedDate;
+  }
+
+  public setSelectedDateTime(selectedDate: Date | undefined | null) {
+
+    const { setSelectedDateTime } = this.props;
+    // Prop callback
+    if (setSelectedDateTime) {
+      setSelectedDateTime(selectedDate);
+    }
   }
 
   public render() {
@@ -419,6 +429,8 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
         errorMessage: (isRequired && !value) ? (strings!.isRequiredErrorMessage || '*') : undefined,
         formattedDate: newValue
       });
+
+      this.setSelectedDateTime(parseDateFromString!(newValue));
     }
   }
 
@@ -447,11 +459,10 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
         this.setSelectedDateTime(modifiedTime);
       }
-    }
-    //For most scenarios only showing time picker indicates there's a default date implying somewhere in the system
-    // So we are allowing user to provide the default date themselves
-    else {
+    } else {
       if (isTimeChanged) {
+        // For most scenarios only showing time picker indicates there's a default date implying somewhere in the system
+        // So we are allowing user to provide the default date themselves
         const defaultDate = this.props.defaultDate ? this.props.defaultDate : new Date();
         const modifiedTime = this.calculatingTime(newValue!, defaultDate);
 
@@ -471,7 +482,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     const indexOfSeprator = time.indexOf(':');
     let hour = Number(time.substring(0, indexOfSeprator)), minute = Number(time.substring(indexOfSeprator + 1, indexOfSeprator + 3));
 
-    //Invalid input return default value
+    // Invalid input return default value
     hour = (hour) ? hour : 0;
     minute = (minute) ? minute : 0;
 
@@ -483,15 +494,6 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
       hour,
       minute
     };
-  }
-
-  public setSelectedDateTime(selectedDate: Date | undefined | null) {
-
-    const { setSelectedDateTime } = this.props;
-    // Prop callback
-    if (setSelectedDateTime) {
-      setSelectedDateTime(selectedDate);
-    }
   }
 
   @autobind
@@ -579,11 +581,11 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
   @autobind
   private _validateTextInput() {
-    const { isRequired, allowTextInput, strings, parseDateFromString, onSelectDate, formatDate, minDate, maxDate } = this.props;
+    const { isRequired, allowTextInput, strings, parseDateFromString, onSelectDate, formatDate, minDate, maxDate, byPassValidation } = this.props;
     const inputValue = this.state.formattedDate;
 
     // Do validation only if DatePicker's popup is dismissed
-    if (this.state.isDatePickerShown) {
+    if (byPassValidation || this.state.isDatePickerShown) {
       return;
     }
 
@@ -600,9 +602,9 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     if (allowTextInput) {
       let date = null;
 
-      //When user deletes calendar value
-      //We should still set the proper state but no formatting needed
-      //Only null value or mininum date with time
+      // When user deletes calendar value
+      // We should still set the proper state but no formatting needed
+      // Only null value or mininum date with time
       if (inputValue !== undefined && inputValue === '' && this.state.selectedDate !== undefined) {
         this.setState({
           selectedDate: undefined
@@ -610,7 +612,6 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
         return;
       }
-
 
       if (inputValue) {
         // Don't parse if the selected date has the same formatted string as what we're about to parse.

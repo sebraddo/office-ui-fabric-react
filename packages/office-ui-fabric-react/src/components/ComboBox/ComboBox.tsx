@@ -813,7 +813,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
 
     // If we allow freeform and we have a pending value, we
     // need to handle that
-    if (allowFreeform && currentPendingValue !== undefined) {
+    if (allowFreeform && currentPendingValue !== '') {
 
       // Check to see if the user typed an exact match
       if (this._indexWithinBounds(currentOptions, currentPendingValueValidIndex)) {

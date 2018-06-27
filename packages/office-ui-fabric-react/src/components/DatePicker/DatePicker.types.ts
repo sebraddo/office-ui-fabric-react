@@ -222,6 +222,11 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   * For time picker scenario, a default date is provided to return a proper date object
   */
   defaultDate?: Date;
+
+  /**
+  * For time picker scenario, a default date is provided to return a proper date object
+  */
+  byPassValidation?: boolean;
 }
 
 export enum DatePickerFormat {
