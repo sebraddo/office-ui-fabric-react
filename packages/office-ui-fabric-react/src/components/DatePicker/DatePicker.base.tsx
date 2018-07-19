@@ -242,15 +242,6 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     return true;
   }
 
-  public setSelectedDateTime(selectedDate: Date | undefined | null) {
-
-    const { setSelectedDateTime } = this.props;
-    // Prop callback
-    if (setSelectedDateTime) {
-      setSelectedDateTime(selectedDate);
-    }
-  }
-
   public calculatingTime(newtime: string, newDate?: Date) {
     const time = this._parseHourAndTime(newtime);
     time.hour = (time.hour) ? time.hour : 0;
@@ -495,7 +486,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     const newValue = (value !== undefined) ? value : (option ? option.text : undefined);
     const isTimeChanged = newValue !== this.state.selectedTime && newValue !== undefined;
 
-    if (this.props.displayDatePickerFormat === DatePickerFormat.bothDateAndDate) {
+    if (this.props.displayDatePickerFormat === DatePickerFormat.bothDateAndTime) {
       // If user didn't pick a date yet, it's not an valid output
       if (!this.state.selectedDate) {
         this.setState({
