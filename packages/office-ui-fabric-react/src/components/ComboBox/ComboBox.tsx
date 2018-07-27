@@ -931,9 +931,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
           useComboBoxAsMenuWidth ?
             this._comboBoxWrapper.clientWidth
             : dropdownWidth }
-        overrideTabIndex={ overrideCalloutTabIndex }
         shouldRestoreFocus={ shouldCalloutReturnFocus }
-        onLayerMounted={ this._onCalloutRendered }
       >
         <div className={ this._classNames.optionsContainerWrapper } ref={ this._resolveRef('_comboBoxMenu') }>
           { (onRenderList as any)({ ...props }, this._onRenderList) }
@@ -941,19 +939,6 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
         { onRenderLowerContent(this.props, this._onRenderLowerContent) }
       </Callout>
     );
-  }
-
-  @autobind
-  private _onCalloutRendered() {
-    if (this.props.doNotForceRefocus) {
-      const index = (this.state.currentPendingValueValidIndex && this.state.currentPendingValueValidIndex >= 0) ?
-        this.state.currentPendingValueValidIndex :
-        (this.state.selectedIndex && this.state.selectedIndex >= 0 ? this.state.selectedIndex : 0);
-      const focusElement = document.getElementById(this._id + '-list' + index);
-      if (focusElement) {
-        focusElement.focus();
-      }
-    }
   }
 
   // Render List of items
@@ -1041,7 +1026,6 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
         onMouseEnter={ this._onOptionMouseEnter.bind(this, item.index) }
         onMouseMove={ this._onOptionMouseMove.bind(this, item.index) }
         onMouseLeave={ this._onOptionMouseLeave }
-        onKeyDown={ this._onListItemKeyDown(item.index) }
         role='option'
         aria-selected={ isSelected ? 'true' : 'false' }
         ariaLabel={ item.text }
@@ -1180,11 +1164,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
       const index = idx as number;
       switch (ev.which) {
         case KeyCodes.tab:
-          if ((ev.shiftKey && index === 0) || (index + 1 === this.props.options.length)) {
-            this._comboBox.focus();
-          } else {
-            return;
-          }
+          this._comboBox.focus();
           break;
         case KeyCodes.escape:
           // reset the selected index

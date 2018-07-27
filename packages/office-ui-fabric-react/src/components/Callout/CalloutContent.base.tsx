@@ -69,7 +69,7 @@ export class CalloutContentBase extends BaseComponent<ICalloutProps, ICalloutSta
     directionalHint: DirectionalHint.bottomAutoEdge
   };
 
-  private _classNames: {[key in keyof ICalloutContentStyles]: string };
+  private _classNames: { [key in keyof ICalloutContentStyles]: string };
   private _didSetInitialFocus: boolean;
   private _hostElement: HTMLDivElement;
   private _calloutElement: HTMLDivElement;
@@ -150,7 +150,6 @@ export class CalloutContentBase extends BaseComponent<ICalloutProps, ICalloutSta
       backgroundColor,
       calloutMaxHeight,
       onScroll,
-      overrideTabIndex,
       shouldRestoreFocus,
     } = this.props;
     target = this._getTarget();
@@ -186,7 +185,7 @@ export class CalloutContentBase extends BaseComponent<ICalloutProps, ICalloutSta
         <div
           className={ css(this._classNames.root, positions && positions.targetEdge && ANIMATIONS[positions.targetEdge!]) }
           style={ positions ? positions.elementPosition : OFF_SCREEN_STYLE }
-          tabIndex={ overrideTabIndex ? undefined : -1 } // Safari and Firefox on Mac OS requires this to back-stop click events so focus remains in the Callout.
+          tabIndex={ -1 } // Safari and Firefox on Mac OS requires this to back-stop click events so focus remains in the Callout.
           // See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#Clicking_and_focus
           ref={ this._resolveRef('_calloutElement') }
           role='presentation'
