@@ -55,6 +55,8 @@ const DayPickerStrings: IDatePickerStrings = {
   goToToday: 'Go to today',
   prevMonthAriaLabel: 'Go to previous month',
   nextMonthAriaLabel: 'Go to next month',
+  weekNameAriaLabel: 'Week',
+  daysOfTheWeekAriaLabel: 'Days of the week',
 };
 
 export interface IDatePickerTimePickerExampleState {
@@ -75,7 +77,7 @@ export class DatePickerTimePickerExample extends React.Component<{}, IDatePicker
 
     return (
       <div>
-        <DatePicker setSelectedDateTime={ this._timeChangeCallback } displayDatePickerFormat={ DatePickerFormat.bothDateAndDate } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
+        <DatePicker disableAutoFocus setSelectedDateTime={ this._timeChangeCallback } displayDatePickerFormat={ DatePickerFormat.bothDateAndTime } firstDayOfWeek={ firstDayOfWeek } allowTextInput strings={ DayPickerStrings } showGoToToday={ false } isMonthPickerVisible={ false } placeholder='Select a date...' />
       </div>
     );
   }

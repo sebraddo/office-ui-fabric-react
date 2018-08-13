@@ -65,6 +65,7 @@ export class Popup extends BaseComponent<IPopupProps, {}> {
         { ...getNativeProps(this.props, divProperties) }
         className={ className }
         role={ role }
+        aria-modal={ role === 'dialog' ? true : null }
         aria-label={ ariaLabel }
         aria-labelledby={ ariaLabelledBy }
         aria-describedby={ ariaDescribedBy }

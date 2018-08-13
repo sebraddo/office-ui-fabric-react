@@ -384,6 +384,7 @@ export class TextField extends BaseComponent<ITextFieldProps, ITextFieldState> i
         aria-invalid={ !!this.state.errorMessage }
         onFocus={ this._onFocus }
         onBlur={ this._onBlur }
+        aria-required={ (this.props.ariaRequired || this.props.required) ? true : undefined }
       />
     );
   }

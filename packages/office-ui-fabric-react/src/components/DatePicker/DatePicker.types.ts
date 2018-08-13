@@ -53,6 +53,11 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   ariaLabel?: string;
 
   /**
+   * Whether this picker should be considered aria required
+   */
+  ariaRequired?: boolean;
+
+  /**
    * Aria label for date picker popup for screen reader users.
    * @defaultvalue Calendar
    */
@@ -181,14 +186,19 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   timeComboboxStyles?: Partial<IComboBoxStyles>;
 
   /**
-   * Prop to indicate whether you want to display datepicker, timepicker or both date and time picker
-   */
-  displayDatePickerFormat?: DatePickerFormat;
+  * onChange event for time combobox
+  */
+  onChangeTimeCombobox?: (index?: number, value?: string) => void;
 
   /**
    * Collection of options for this ComboBox
    */
   timeOptions?: IComboBoxOption[];
+
+  /**
+   * Default display and selected key of time options
+   */
+  defaultSetTimeValue?: string;
 
   /**
    * Default display and selected key of time options
@@ -201,6 +211,11 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
    * Output hour as number and minute as number
    */
   customizeTimeConverter?: (time: string) => { hour: number, minute: number };
+
+  /**
+   * Prop to indicate whether you want to display datepicker, timepicker or both date and time picker
+   */
+  displayDatePickerFormat?: DatePickerFormat;
 
   /**
   * Call to provide customized styling that will layer on top of the variant rules.
@@ -227,12 +242,28 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
   * For time picker scenario, a default date is provided to return a proper date object
   */
   byPassValidation?: boolean;
+
+  /**
+  * Formatter of date was done in different module, this is the output of the date formatter
+  */
+  displayFormattedDate?: string;
+
+  /**
+  * Compliment with showing displayFormattedDate, since we are bypassing the formatter pipeline here
+  * consumer needs to supply the rawDate
+  */
+  rawDate?: Date;
+
+  /**
+   * Default time value
+   */
+  defaultInitialTimeValue?: string;
 }
 
 export enum DatePickerFormat {
   dateOnly = 0,
   timeOnly = 1,
-  bothDateAndDate = 2,
+  bothDateAndTime = 2,
 }
 
 export interface IDatePickerStrings {
@@ -299,6 +330,16 @@ export interface IDatePickerStrings {
    * Aria-label for the "next year" button.
    */
   nextYearAriaLabel?: string;
+
+  /**
+  *
+  */
+  weekNameAriaLabel?: string;
+
+  /**
+   *
+   */
+  daysOfTheWeekAriaLabel?: string;
 }
 
 export interface IDatePickerStyleProps {
@@ -320,6 +361,11 @@ export interface IDatePickerStyles {
    * Base styles for the date container
    */
   dateContainer?: IStyle;
+
+  /**
+   * Base styles for the date container
+   */
+  dateContainerChildDiv?: IStyle;
 
   /**
    * Base styles for the date text field
