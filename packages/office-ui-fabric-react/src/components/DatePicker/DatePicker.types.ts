@@ -258,6 +258,16 @@ export interface IDatePickerProps extends React.Props<DatePickerBase>, IWithResp
    * Default time value
    */
   defaultInitialTimeValue?: string;
+
+  /**
+   * If the page is in Right-To-Left Direction
+   */
+  isRTL?: boolean;
+
+  /**
+   * Format of the time component between 12hr clocks and 24hr clocks
+   */
+  isTwentyFourHourTimeFormat?: boolean;
 }
 
 export enum DatePickerFormat {
