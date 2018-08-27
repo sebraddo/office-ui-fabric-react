@@ -140,6 +140,10 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
       return '';
     },
     parseDateFromString: (dateStr: string) => {
+      if (dateStr == "" || dateStr == "---") {
+        return "";
+      }
+
       const date = Date.parse(dateStr);
       if (date) {
         return new Date(date);
@@ -230,7 +234,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     } else if (formattedDate || this.props.defaultSetTimeValue !== nextProps.defaultSetTimeValue) {
       const selectedDate = this.calculatingTime(defaultSetTimeValue!, parseDateFromString!(formattedDate!)!);
 
-      if (selectedDate) {
+      if (selectedDate || selectedDate == "") {
         this.setState({
           formattedDate: formattedDate,
           selectedDate: selectedDate,
@@ -247,7 +251,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     time.hour = (time.hour) ? time.hour : 0;
     time.minute = (time.minute) ? time.minute : 0;
 
-    if (!newDate) {
+    if (!newDate && newDate !== "") {
       // Reset invalid input field, if formatting is available
       this.setState({
         formattedDate: this.props.displayFormattedDate
@@ -255,10 +259,12 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     }
 
     // Return the correct date object with the time modified
-    const updatedDate = (newDate ? newDate : this.state.selectedDate as Date);
+    const updatedDate = (newDate || newDate == "" ? newDate : this.state.selectedDate as Date);
 
     if (updatedDate) {
       updatedDate.setHours(time.hour, time.minute);
+      return updatedDate;
+    } else if (updatedDate == "") {
       return updatedDate;
     }
 

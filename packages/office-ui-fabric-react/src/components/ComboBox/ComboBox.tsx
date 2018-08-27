@@ -910,7 +910,6 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
       dropdownWidth,
       onRenderLowerContent = this._onRenderLowerContent,
       useComboBoxAsMenuWidth,
-      overrideCalloutTabIndex,
       shouldCalloutReturnFocus
     } = props;
 

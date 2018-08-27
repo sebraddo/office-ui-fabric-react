@@ -156,11 +156,6 @@ export interface IComboBoxProps extends ISelectableDroppableTextProps<IComboBox>
   isButtonAriaHidden?: boolean;
 
   /**
-   * Override the tabIndex of -1 that callouts by default have
-   */
-  overrideCalloutTabIndex?: boolean;
-
-  /**
    * Whether this picker should be considered aria required
    */
   ariaRequired?: boolean;
