@@ -1634,7 +1634,7 @@ export class ComboBox extends BaseComponent<IComboBoxProps, IComboBoxState> {
  */
   private _getCaretButtonStyles() {
     const { caretDownButtonStyles: customCaretDownButtonStyles } = this.props;
-    return getCaretDownButtonStyles(this.props.theme!, customCaretDownButtonStyles);
+    return getCaretDownButtonStyles(this.props.theme!, customCaretDownButtonStyles, this.props.isRTL);
   }
 
   /**

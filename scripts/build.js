@@ -11,12 +11,12 @@ if (!package) {
 const packageName = package.name;
 const isProduction = process.argv.indexOf('--production') > -1;
 
+ // 'tslint',
+// 'jest',
 let tasks = [
   'copy',
   'sass',
-  'tslint',
   'ts',
-  'jest',
   'webpack'
 ];
 

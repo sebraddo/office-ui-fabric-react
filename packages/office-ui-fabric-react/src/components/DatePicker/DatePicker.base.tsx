@@ -15,7 +15,7 @@ import { FirstWeekOfYear } from '../../utilities/dateValues/DateValues';
 import { Callout } from '../../Callout';
 import { DirectionalHint } from '../../common/DirectionalHint';
 import { TextField, ITextField } from '../../TextField';
-import { ComboBox, IComboBoxProps, IComboBoxOption, } from '../ComboBox';
+import { ComboBox, IComboBoxProps, IComboBoxOption, } from '../../ComboBox';
 import { Label } from '../../Label';
 import {
   autobind,
@@ -25,7 +25,7 @@ import {
   classNamesFunction
 } from '../../Utilities';
 import { compareDates, compareDatePart } from '../../utilities/dateMath/DateMath';
-import { IIconProps } from '../Icon/Icon.types';
+import { IIconProps, IIconStyles } from '../Icon/Icon.types';
 import { withResponsiveMode, ResponsiveMode } from '../../utilities/decorators/withResponsiveMode';
 import { defaultTimeBoxStyle } from './DatePicker.Style';
 import { concatStyleSets } from '../../Styling';
@@ -99,34 +99,107 @@ const DEFAULT_STRINGS: IDatePickerStrings = {
   nextYearAriaLabel: 'Go to next year'
 };
 
-const defaultTimeOptions =
-  [
-    { key: '0', text: '1:00 AM' },
-    { key: '1', text: '2:00 AM' },
-    { key: '2', text: '3:00 AM' },
-    { key: '3', text: '4:00 AM' },
-    { key: '4', text: '5:00 AM' },
-    { key: '5', text: '6:00 AM' },
-    { key: '6', text: '7:00 AM' },
-    { key: '7', text: '8:00 AM' },
-    { key: '8', text: '9:00 AM' },
-    { key: '9', text: '10:00 AM' },
-    { key: '10', text: '11:00 AM' },
-    { key: '11', text: '12:00 PM' },
-    { key: '12', text: '1:00 PM' },
-    { key: '13', text: '2:00 PM' },
-    { key: '14', text: '3:00 PM' },
-    { key: '15', text: '4:00 PM' },
-    { key: '16', text: '5:00 PM' },
-    { key: '17', text: '6:00 PM' },
-    { key: '18', text: '7:00 PM' },
-    { key: '19', text: '8:00 PM' },
-    { key: '20', text: '9:00 PM' },
-    { key: '21', text: '10:00 PM' },
-    { key: '22', text: '11:00 PM' },
-    { key: '23', text: '12:00 AM' },
+const twelveHourTimeOptions = [
+  { key: '0', text: '12:00 AM' },
+  { key: '1', text: '12:30 AM' },
+  { key: '2', text: '1:00 AM' },
+  { key: '3', text: '1:30 AM' },
+  { key: '4', text: '2:00 AM' },
+  { key: '5', text: '2:30 AM' },
+  { key: '6', text: '3:00 AM' },
+  { key: '7', text: '3:30 AM' },
+  { key: '8', text: '4:00 AM' },
+  { key: '9', text: '4:30 AM' },
+  { key: '10', text: '5:00 AM' },
+  { key: '11', text: '5:30 AM' },
+  { key: '12', text: '6:00 AM' },
+  { key: '13', text: '6:30 AM' },
+  { key: '14', text: '7:00 AM' },
+  { key: '15', text: '7:30 AM' },
+  { key: '16', text: '8:00 AM' },
+  { key: '17', text: '8:30 AM' },
+  { key: '18', text: '9:00 AM' },
+  { key: '19', text: '9:30 AM' },
+  { key: '20', text: '10:00 AM' },
+  { key: '21', text: '10:30 AM' },
+  { key: '22', text: '11:00 AM' },
+  { key: '23', text: '11:30 AM' },
+  { key: '24', text: '12:00 PM' },
+  { key: '25', text: '12:30 PM' },
+  { key: '26', text: '1:00 PM' },
+  { key: '27', text: '1:30 PM' },
+  { key: '28', text: '2:00 PM' },
+  { key: '29', text: '2:30 PM' },
+  { key: '30', text: '3:00 PM' },
+  { key: '31', text: '3:30 PM' },
+  { key: '32', text: '4:00 PM' },
+  { key: '33', text: '4:30 PM' },
+  { key: '34', text: '5:00 PM' },
+  { key: '35', text: '5:30 PM' },
+  { key: '36', text: '6:00 PM' },
+  { key: '37', text: '6:30 PM' },
+  { key: '38', text: '7:00 PM' },
+  { key: '39', text: '7:30 PM' },
+  { key: '40', text: '8:00 PM' },
+  { key: '41', text: '8:30 PM' },
+  { key: '42', text: '9:00 PM' },
+  { key: '43', text: '9:30 PM' },
+  { key: '44', text: '10:00 PM' },
+  { key: '45', text: '10:30 PM' },
+  { key: '46', text: '11:00 PM' },
+  { key: '47', text: '11:30 PM' }
+]
 
-  ];
+const twentyFourHourTimeOptions = [
+  { key: '0', text: '00:00' },
+  { key: '1', text: '00:30' },
+  { key: '2', text: '01:00' },
+  { key: '3', text: '01:30' },
+  { key: '4', text: '02:00' },
+  { key: '5', text: '02:30' },
+  { key: '6', text: '03:00' },
+  { key: '7', text: '03:30' },
+  { key: '8', text: '04:00' },
+  { key: '9', text: '04:30' },
+  { key: '10', text: '05:00' },
+  { key: '11', text: '05:30' },
+  { key: '12', text: '06:00' },
+  { key: '13', text: '06:30' },
+  { key: '14', text: '07:00' },
+  { key: '15', text: '07:30' },
+  { key: '16', text: '08:00' },
+  { key: '17', text: '08:30' },
+  { key: '18', text: '09:00' },
+  { key: '19', text: '09:30' },
+  { key: '20', text: '10:00' },
+  { key: '21', text: '10:30' },
+  { key: '22', text: '11:00' },
+  { key: '23', text: '11:30' },
+  { key: '24', text: '12:00' },
+  { key: '25', text: '12:30' },
+  { key: '26', text: '13:00' },
+  { key: '27', text: '13:30' },
+  { key: '28', text: '14:00' },
+  { key: '29', text: '14:30' },
+  { key: '30', text: '15:00' },
+  { key: '31', text: '15:30' },
+  { key: '32', text: '16:00' },
+  { key: '33', text: '16:30' },
+  { key: '34', text: '17:00' },
+  { key: '35', text: '17:30' },
+  { key: '36', text: '18:00' },
+  { key: '37', text: '18:30' },
+  { key: '38', text: '19:00' },
+  { key: '39', text: '19:30' },
+  { key: '40', text: '20:00' },
+  { key: '41', text: '20:30' },
+  { key: '42', text: '21:00' },
+  { key: '43', text: '21:30' },
+  { key: '44', text: '22:00' },
+  { key: '45', text: '22:30' },
+  { key: '46', text: '23:00' },
+  { key: '47', text: '23:30' }
+]
 
 @withResponsiveMode
 export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerState> {
@@ -160,7 +233,9 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     firstWeekOfYear: FirstWeekOfYear.FirstDay,
     showGoToToday: true,
     dateTimeFormatter: undefined,
-    displayDatePickerFormat: DatePickerFormat.dateOnly
+    displayDatePickerFormat: DatePickerFormat.dateOnly,
+    isRTL: false,
+    isTwentyFourHourTimeFormat: false
   };
 
   private _root: HTMLElement;
@@ -169,6 +244,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   private _textField: ITextField;
   private _preventFocusOpeningPicker: boolean;
   private _focusOnSelectedDateOnUpdate: boolean;
+  private _timeOptions: { key: string, text: string }[];
   // Bug on IE11 onTextBlur will fire when user user calendar to pick a date
   // whereas chrome, firefox will not
   private _formattedValueChanged?: boolean;
@@ -176,9 +252,10 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   constructor(props: IDatePickerProps) {
     super(props);
 
+    this._timeOptions = props.isTwentyFourHourTimeFormat ? twentyFourHourTimeOptions : twelveHourTimeOptions;
     const { formatDate, value, displayFormattedDate, rawDate, defaultSetTimeValue } = props;
     const defaultSelectedTimeKey = (this.props.defaultSelectedTimeKey) ? this.props.defaultSelectedTimeKey : 10;
-    const defaultTime = (this.props.displayDatePickerFormat === DatePickerFormat.dateOnly) ? defaultTimeOptions[12].text : (this.props.timeOptions ? this.props.timeOptions[defaultSelectedTimeKey].text : defaultTimeOptions[defaultSelectedTimeKey].text);
+    const defaultTime = (this.props.displayDatePickerFormat === DatePickerFormat.dateOnly) ? this._timeOptions[0].text : (this.props.timeOptions ? this.props.timeOptions[defaultSelectedTimeKey].text : this._timeOptions[defaultSelectedTimeKey].text);
 
     this.state = {
       selectedDate: value || rawDate || undefined,
@@ -193,6 +270,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   }
 
   public componentWillReceiveProps(nextProps: IDatePickerProps) {
+
     const { formatDate, isRequired, strings, value, minDate, maxDate, defaultSetTimeValue, parseDateFromString } = nextProps;
 
     if (compareDates(this.props.minDate!, nextProps.minDate!) &&
@@ -218,14 +296,13 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
     // Issue# 1274: Check if the date value changed from old value, i.e., if indeed a new date is being
     // passed in or if the formatting function was modified. We only update the selected date if either of these
-    // had a legit change. Note tha the bug will still repro when only the formatDate was passed in props and this
-    // is the result of the onSelectDate callback, but this should be a rare scenario.
+    // had a legit change.
     const oldValue = this.state.selectedDate;
     const formattedDate = nextProps.displayFormattedDate;
     if (value !== undefined && !compareDates(oldValue!, value!) || this.props.formatDate !== formatDate) {
       this.setState({
         selectedDate: value || undefined,
-        formattedDate: (formatDate && value) ? formatDate(value) : '',
+        formattedDate: (formatDate && (value || oldValue)) ? formatDate(oldValue || value) : '',
       });
     } else if (formattedDate || this.props.defaultSetTimeValue !== nextProps.defaultSetTimeValue) {
       const selectedDate = this.calculatingTime(defaultSetTimeValue!, parseDateFromString!(formattedDate!)!);
@@ -267,6 +344,15 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     return null;
   }
 
+  public setSelectedDateTime(selectedDate: Date | undefined | null) {
+
+    const { setSelectedDateTime } = this.props;
+    // Prop callback
+    if (setSelectedDateTime) {
+      setSelectedDateTime(selectedDate);
+    }
+  }
+
   public render() {
     const {
       firstDayOfWeek,
@@ -290,7 +376,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
       defaultSetTimeValue,
       getStyles
     } = this.props;
-    const timeOptions = (this.props.timeOptions) ? this.props.timeOptions : defaultTimeOptions;
+    const timeOptions = (this.props.timeOptions) ? this.props.timeOptions : this._timeOptions;
     const { isDatePickerShown, formattedDate, selectedDate, errorMessage } = this.state;
     const classNames = getClassNames(getStyles, { className: className!, disabled, responsiveMode, label, displayDatePickerFormat });
 
@@ -298,6 +384,16 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
       iconName: 'Clock',
       className: classNames.timePickerIconStyle
     };
+
+    const textFieldIconStyles = this.props.isRTL ? {
+      right: 'auto',
+      left: '9px',
+      'margin-left': '-25px',
+      'margin-right': 'auto',
+      'padding-right': '20px',
+      'padding-left': 'unset',
+      'text-align': 'right'
+    } : {};
 
     const timeComboboxCustomizedStyles = concatStyleSets(defaultTimeBoxStyle, timeComboboxStyles);
 
@@ -327,7 +423,8 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
                 iconProps={ {
                   iconName: 'Calendar',
                   onClick: this._onIconClick,
-                  className: classNames.iconStyle
+                  className: classNames.iconStyle,
+                  style: textFieldIconStyles
                 } }
                 readOnly={ !allowTextInput }
                 value={ formattedDate }
@@ -349,6 +446,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
             options={ timeOptions }
             useComboBoxAsMenuWidth
             buttonIconProps={ buttonIconProps }
+            isRTL={ this.props.isRTL }
           /> }
         </div>
         { isDatePickerShown && (
@@ -394,15 +492,6 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
   public focus(): void {
     if (this._textField) {
       this._textField.focus();
-    }
-  }
-
-  public setSelectedDateTime(selectedDate: Date | undefined | null) {
-
-    const { setSelectedDateTime } = this.props;
-    // Prop callback
-    if (setSelectedDateTime) {
-      setSelectedDateTime(selectedDate);
     }
   }
 
@@ -634,6 +723,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
 
   @autobind
   private _validateTextInput() {
+
     const { isRequired, allowTextInput, strings, parseDateFromString,
       onSelectDate, formatDate, minDate, maxDate, byPassValidation } = this.props;
     const inputValue = this.state.formattedDate;
@@ -643,7 +733,7 @@ export class DatePickerBase extends BaseComponent<IDatePickerProps, IDatePickerS
     }
 
     // Do validation only if DatePicker's popup is dismissed
-    if (this.state.isDatePickerShown) {
+    if (byPassValidation || this.state.isDatePickerShown) {
       return;
     }
 
