@@ -138,6 +138,7 @@ export const getOptionStyles = memoizeFunction((
 export const getCaretDownButtonStyles = memoizeFunction((
   theme: ITheme,
   customStyles?: Partial<IButtonStyles>,
+  isRTL?: boolean
 ): IButtonStyles => {
   const { semanticColors } = theme;
 
@@ -154,7 +155,8 @@ export const getCaretDownButtonStyles = memoizeFunction((
       position: 'absolute',
       // The negative positioning accounts for the 1px root border now that box-sizing is border-box
       top: '-1px',
-      right: '-1px',
+      right: isRTL ? 'auto' : '-1px',
+      left: isRTL ? '-1px' : 'auto',
       height: ComboBoxHeight,
       lineHeight: ComboBoxLineHeight,
       width: ComboxBoxCaretDownWidth,

@@ -27,12 +27,12 @@ export class Icon extends BaseComponent<IIconProps, IIconState> {
 
   public render() {
     const {
-    ariaLabel,
+      ariaLabel,
       className,
       styles,
       iconName,
       imageErrorAs,
-   } = this.props;
+    } = this.props;
     const classNames = getClassNames(
       styles
     );
@@ -55,7 +55,7 @@ export class Icon extends BaseComponent<IIconProps, IIconState> {
       const ImageType = imageLoadError && imageErrorAs || Image;
       return (
         <div
-          {...containerProps}
+          { ...containerProps }
           className={
             css(
               containerClassName,
@@ -68,7 +68,7 @@ export class Icon extends BaseComponent<IIconProps, IIconState> {
     } else if (typeof iconName === 'string' && iconName.length === 0) {
       return (
         <i
-          {...containerProps}
+          { ...containerProps }
           { ...getNativeProps(this.props, htmlElementProperties) }
           className={
             css(
@@ -88,7 +88,7 @@ export class Icon extends BaseComponent<IIconProps, IIconState> {
 
       return (
         <i
-          {...containerProps}
+          { ...containerProps }
           { ...getNativeProps(this.props, htmlElementProperties) }
           className={
             css(
